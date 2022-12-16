@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="MVVM_Basics.Views.SideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Basics.Views"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="#000000"
+             FontFamily="{DynamicResource MainFont}"
+             
+             mc:Ignorable="d" 
+             Width="250"
+             d:DesignHeight="450" d:DesignWidth="250">
+    <Grid>
+        <Border Background="Black" CornerRadius="20 0 0 0" Grid.Column="0" Grid.Row="0">
+            <StackPanel Margin="20 10 0 0" Orientation="Vertical">
+                <!--Three dot menu-->
+
+                <TextBlock Width="40" HorizontalAlignment="Left"
+                                   Text="..." TextAlignment="Center"
+                                   FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
+                                   Foreground="White">
+
+                </TextBlock>
+
+                <!--Home-->
+                <Button Style="{DynamicResource sideMenuButton}"
+                            Margin="0 20 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Home" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Style="{DynamicResource sideMenuTitleBorder}">
+                            <TextBlock Text="Home" Style="{DynamicResource sideMenuTitle}">
+                            </TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <!--Search-->
+                <Button Style="{DynamicResource sideMenuButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Magnify" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Style="{DynamicResource sideMenuTitleBorder}">
+                            <TextBlock Text="Search" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock></TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock></TextBlock>
+
+                <!--Create playlist-->
+                <Button Style="{DynamicResource sideMenuButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PlusBox" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Style="{DynamicResource sideMenuTitleBorder}">
+                            <TextBlock Text="Create Playlist" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <!--Favourite songs-->
+                <Button Style="{DynamicResource sideMenuButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="HeartBox" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Style="{DynamicResource sideMenuTitleBorder}">
+                            <TextBlock Text="Favourite Songs" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock></TextBlock>
+                <Line Stroke="#282828" X1="0" X2="200"></Line>
+
+                
+                <ListView x:Name="playlistList"
+                              Height="233"
+                              BorderBrush="Black"
+                              Background="Black"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding}" Style="{DynamicResource sideMenuTitle}"
+                                               FontSize="14" FontFamily="Gotham Rounded Book"
+                                               Margin="0 20 0 0"
+                                               HorizontalAlignment="Left">
+
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

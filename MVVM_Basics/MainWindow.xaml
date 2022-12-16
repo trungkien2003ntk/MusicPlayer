@@ -1,0 +1,46 @@
+﻿<Window x:Class="MVVM_Basics.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MVVM_Basics"
+        mc:Ignorable="d"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        DataContext="{DynamicResource MainVM}"
+        WindowStyle="None"
+        xmlns:views="clr-namespace:MVVM_Basics.Views"
+        Title="MainWindow" Height="700" Width="1050">
+    <materialDesign:Card
+                Width="auto"
+                Background="#121212"
+                Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <views:ControlBar
+                Grid.Row="0" Grid.Column="1" 
+                VerticalAlignment="Top" HorizontalAlignment="Right"/>
+            <views:SideBar
+                Height="auto"
+                Grid.Row="0" Grid.Column="0"/>
+        </Grid>
+        
+    </materialDesign:Card>
+</Window>
