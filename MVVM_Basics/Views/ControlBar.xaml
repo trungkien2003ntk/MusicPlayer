@@ -12,7 +12,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              Background="#101010"
-             FontFamily="{DynamicResource MaterialDesignFont}"
+             FontFamily="{DynamicResource MainFont}"
              
              DataContext="{StaticResource ControlBarVM}"
              mc:Ignorable="d"
