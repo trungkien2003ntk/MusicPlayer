@@ -10,10 +10,16 @@
     <Compile Update="Views\ControlBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\CurrentPlayingMusic.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\HomePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SideBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TrackControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -24,13 +30,25 @@
     <Page Update="ResourcesXAML\MainResource.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="ResourcesXAML\ScrollBarResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ResourcesXAML\TrackControlResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ControlBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CurrentPlayingMusic.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\HomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SideBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TrackControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

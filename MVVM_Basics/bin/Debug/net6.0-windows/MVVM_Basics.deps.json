@@ -8,7 +8,9 @@
     ".NETCoreApp,Version=v6.0": {
       "MVVM_Basics/1.0.0": {
         "dependencies": {
+          "ID3": "0.6.0",
           "MaterialDesignThemes": "4.6.1",
+          "Microsoft-WindowsAPICodePack-Shell": "1.1.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.0",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.0"
         },
@@ -58,6 +60,25 @@
           }
         }
       },
+      "ID3/0.6.0": {
+        "dependencies": {
+          "JetBrains.Annotations": "2018.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Id3.Net.dll": {
+            "assemblyVersion": "0.6.0.0",
+            "fileVersion": "0.6.0.0"
+          }
+        }
+      },
+      "JetBrains.Annotations/2018.3.0": {
+        "runtime": {
+          "lib/netstandard2.0/JetBrains.Annotations.dll": {
+            "assemblyVersion": "2018.3.0.0",
+            "fileVersion": "2018.3.0.0"
+          }
+        }
+      },
       "MaterialDesignColors/2.0.9": {
         "runtime": {
           "lib/net6.0/MaterialDesignColors.dll": {
@@ -74,6 +95,25 @@
           "lib/net6.0/MaterialDesignThemes.Wpf.dll": {
             "assemblyVersion": "4.6.1.0",
             "fileVersion": "4.6.1.0"
+          }
+        }
+      },
+      "Microsoft-WindowsAPICodePack-Core/1.1.4": {
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {
+            "assemblyVersion": "1.1.4.0",
+            "fileVersion": "1.1.4.0"
+          }
+        }
+      },
+      "Microsoft-WindowsAPICodePack-Shell/1.1.4": {
+        "dependencies": {
+          "Microsoft-WindowsAPICodePack-Core": "1.1.4"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.Shell.dll": {
+            "assemblyVersion": "1.1.4.0",
+            "fileVersion": "1.1.4.0"
           }
         }
       },
@@ -665,6 +705,20 @@
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
     },
+    "ID3/0.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7oHf3mjkeJp5xHAOqE0y9xxnFbJH7VifL1EHjRNHY6LiC2LeMERTTmEQBJXaqrIJ5KgehUkY5XhuskaPoanUqA==",
+      "path": "id3/0.6.0",
+      "hashPath": "id3.0.6.0.nupkg.sha512"
+    },
+    "JetBrains.Annotations/2018.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Hbt5edAd7OfnYwsRayYguECzIJ4FUWDGjeEHsmxIgEpBbqZglhpxqjPWnWN/pEQM1HFGojMrR9dsywmC8pPTeQ==",
+      "path": "jetbrains.annotations/2018.3.0",
+      "hashPath": "jetbrains.annotations.2018.3.0.nupkg.sha512"
+    },
     "MaterialDesignColors/2.0.9": {
       "type": "package",
       "serviceable": true,
@@ -678,6 +732,20 @@
       "sha512": "sha512-Yx3RxIqkwoe1rYxoUZ2iH1YdCly+dA8YAQJ5uknsUVhyVd1rgiXEn6fmtsovGaqKRZwUXGHnh4w7kRagxa8TCg==",
       "path": "materialdesignthemes/4.6.1",
       "hashPath": "materialdesignthemes.4.6.1.nupkg.sha512"
+    },
+    "Microsoft-WindowsAPICodePack-Core/1.1.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gsEStalyKPTR5/HKyAHYvIoDZTGUTUgIBS1eeGvkjWgDYB7f5aSBFAAJfxhhDsOGDjLs6O0uzw1H0EWYWZGDmg==",
+      "path": "microsoft-windowsapicodepack-core/1.1.4",
+      "hashPath": "microsoft-windowsapicodepack-core.1.1.4.nupkg.sha512"
+    },
+    "Microsoft-WindowsAPICodePack-Shell/1.1.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EtoEx9Fx3ZGW//sni9TB1vuBvzXIlyG8E2KNaX7bqV240aiU8RP+NmDHd1ox0YKbJDMxq7AWSI2jPhpLMYXKyw==",
+      "path": "microsoft-windowsapicodepack-shell/1.1.4",
+      "hashPath": "microsoft-windowsapicodepack-shell.1.1.4.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
       "type": "package",
