@@ -2,10 +2,17 @@
                     xmlns:viewmodel="clr-namespace:MVVM_Basics.ViewModels"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <viewmodel:MainViewModel x:Key="MainVM"></viewmodel:MainViewModel>
-    <viewmodel:ControlBarViewModel x:Key="ControlBarVM"></viewmodel:ControlBarViewModel>
-    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Gotham Rounded Medium"</FontFamily>
+    <!-- View  model -->
+    <viewmodel:MainViewModel x:Key="MainVM"/>
+    <viewmodel:ControlBarViewModel x:Key="ControlBarVM"/>
+    <viewmodel:CurrentPlayingSongViewModel x:Key="CurrentPlayingSongVM"/>
+    <viewmodel:TrackControlViewModel x:Key="TrackControlVM"/>
 
+    <!-- Font Family -->
+    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Gotham Rounded Medium"</FontFamily>
+    <FontFamily x:Key="TitleFont">pack://application:,,,/Fonts/#Montserrat</FontFamily>
+        
+    <!-- Style -->
     <Style x:Key="sideMenuTitle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#b3b3b3"/>
         <Setter Property="FontSize" Value="15"/>
@@ -104,4 +111,37 @@
             </EventTrigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="currentPlayingSongTitle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="MaxWidth" Value="190"/>
+        <Setter Property="Foreground" Value="#f1f1f1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Gotham Rounded"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="TextDecorations" Value="Underline"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="currentPlayingSongArtist" TargetType="TextBlock">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Foreground" Value="#929292"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Gotham Rounded Light"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="TextDecorations" Value="Underline"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
 </ResourceDictionary>
