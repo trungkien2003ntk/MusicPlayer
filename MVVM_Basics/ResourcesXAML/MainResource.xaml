@@ -5,8 +5,7 @@
     <!-- View  model -->
     <viewmodel:MainViewModel x:Key="MainVM"/>
     <viewmodel:ControlBarViewModel x:Key="ControlBarVM"/>
-    <viewmodel:CurrentPlayingSongViewModel x:Key="CurrentPlayingSongVM"/>
-    <viewmodel:TrackControlViewModel x:Key="TrackControlVM"/>
+    <viewmodel:SongControlViewModel x:Key="SongControlVM"/>
 
     <!-- Font Family -->
     <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Gotham Rounded Medium"</FontFamily>
