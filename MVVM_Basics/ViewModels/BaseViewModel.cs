@@ -35,7 +35,7 @@ namespace MVVM_Basics.ViewModels
         {
             try
             {
-                return _canExecute == null ? true : _canExecute((T)parameter);
+                return _canExecute == null || _canExecute((T)parameter);
             }
             catch
             {
