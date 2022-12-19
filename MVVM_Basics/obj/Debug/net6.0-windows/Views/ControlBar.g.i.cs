@@ -65,7 +65,7 @@ namespace MVVM_Basics.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MVVM_Basics;component/views/controlbar.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MVVM_Basics;V1.0.0.0;component/views/controlbar.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\ControlBar.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

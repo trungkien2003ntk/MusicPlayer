@@ -33,6 +33,9 @@
     <Page Update="ResourcesXAML\ScrollBarResource.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="ResourcesXAML\PlaylistResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="ResourcesXAML\TrackControlResource.xaml">
       <SubType>Designer</SubType>
     </Page>
