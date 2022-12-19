@@ -121,6 +121,7 @@
         
         
         <Grid Grid.Column="2" 
+              Margin="0 0 15 0"
               HorizontalAlignment="Right" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
