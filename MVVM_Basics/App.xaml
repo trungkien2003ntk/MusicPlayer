@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="/ResourcesXAML/MainResource.xaml"/>
                 <ResourceDictionary Source="/ResourcesXAML/TrackControlResource.xaml"/>
                 <ResourceDictionary Source="/ResourcesXAML/ScrollBarResource.xaml"/>
+                <ResourceDictionary Source="/ResourcesXAML/PlaylistResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
