@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\CircularStd-Black.otf" />
+    <None Remove="Fonts\CircularStd-BlackItalic.otf" />
+    <None Remove="Fonts\CircularStd-Bold.otf" />
+    <None Remove="Fonts\CircularStd-BoldItalic.otf" />
+    <None Remove="Fonts\CircularStd-Book.otf" />
+    <None Remove="Fonts\CircularStd-BookItalic.otf" />
+    <None Remove="Fonts\CircularStd-Light Italic.otf" />
+    <None Remove="Fonts\CircularStd-Light.otf" />
+    <None Remove="Fonts\CircularStd-Medium.otf" />
+    <None Remove="Fonts\CircularStd-MediumItalic.otf" />
     <None Remove="Images\DefaultPlaylistCoverImage.jpeg" />
   </ItemGroup>
 
@@ -20,9 +30,40 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\CircularStd-Black.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-BlackItalic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-BoldItalic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-Book.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-BookItalic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-Light Italic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-Light.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-Medium.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\CircularStd-MediumItalic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\DefaultPlaylistCoverImage.jpeg" />
   </ItemGroup>
 

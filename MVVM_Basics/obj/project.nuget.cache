@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CKUxVGjk4+jRBXYOOfTbiakO95PYKQncuUQjJb8w3gKIypTk8lbpyxEBW3YwhGloryWvUQ3gFriAqjX9Urkt1Q==",
+  "dgSpecHash": "9RbpMLAQ93ZoZno6d2z4swMEtRTpEhVpy1PNPttyMA9afQz91feYxslT97nCs1wqK2TtOiUavpfAZ0Lv6IWJbQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj",
   "expectedPackageFiles": [
@@ -47,6 +47,7 @@
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.39\\microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",

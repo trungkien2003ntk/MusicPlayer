@@ -113,7 +113,7 @@ namespace MVVM_Basics.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MVVM_Basics;V1.0.0.0;component/views/songcontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MVVM_Basics;component/views/songcontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\SongControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
