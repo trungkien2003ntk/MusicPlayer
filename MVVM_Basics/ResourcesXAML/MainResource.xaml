@@ -6,10 +6,12 @@
     <viewmodel:MainViewModel x:Key="MainVM"/>
     <viewmodel:ControlBarViewModel x:Key="ControlBarVM"/>
     <viewmodel:SongControlViewModel x:Key="SongControlVM"/>
+    <viewmodel:SideBarViewModel x:Key="SideBarVM"/>
 
     <!-- Font Family -->
-    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Gotham Rounded Medium"</FontFamily>
-    <FontFamily x:Key="TitleFont">pack://application:,,,/Fonts/#Montserrat</FontFamily>
+    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Circular Std Light"</FontFamily>
+    <FontFamily x:Key="CircularBlack">pack://application:,,,/Fonts/#Circular Std Black</FontFamily>
+    <FontFamily x:Key="CircularBook">pack://application:,,,/Fonts/#Circular Std Book</FontFamily>
         
     <!-- Style -->
     <Style x:Key="sideMenuTitle" TargetType="TextBlock">
