@@ -10,8 +10,11 @@ namespace MVVM_Basics.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        public static User LoginedUser { get; set; }
+
         public MainViewModel()
         {
+            LoginedUser = DataProvider.Ins.DB.Users.First();
             //MessageBox.Show("Đã vào MainViewModel -> Data Context của MainWindow");
         }
     }
