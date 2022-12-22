@@ -14,24 +14,34 @@
              Background="#000000"
              FontFamily="{DynamicResource MainFont}"
              
+             DataContext="{DynamicResource SideBarVM}"
              mc:Ignorable="d" 
              Width="250"
-             d:DesignHeight="450" d:DesignWidth="250">
+             d:DesignHeight="583" d:DesignWidth="250">
     <Grid>
         <Border Background="Black" CornerRadius="20 0 0 0" Grid.Column="0" Grid.Row="0">
-            <StackPanel Margin="20 10 0 0" Orientation="Vertical">
+            <Grid Margin="20 10 0 0" x:Name="MainGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <!--Three dot menu-->
 
-                <TextBlock Width="40" HorizontalAlignment="Left"
-                                   Text="..." TextAlignment="Center"
-                                   FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
-                                   Foreground="White">
-
-                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Width="40" HorizontalAlignment="Left"
+                           Text="..." TextAlignment="Center"
+                           FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
+                           Foreground="White"/>
 
                 <!--Home-->
-                <Button Style="{DynamicResource sideMenuButton}"
-                            Margin="0 20 0 0">
+                <Button Grid.Row="1"
+                        Style="{DynamicResource sideMenuButton}"
+                        Margin="0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Home" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
@@ -42,7 +52,9 @@
                 </Button>
 
                 <!--Search-->
-                <Button Style="{DynamicResource sideMenuButton}">
+                <Button Grid.Row="2"
+                        Margin="0 0 0 15"
+                        Style="{DynamicResource sideMenuButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Magnify" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
@@ -51,42 +63,81 @@
                     </StackPanel>
                 </Button>
 
-                <TextBlock></TextBlock>
-                <TextBlock></TextBlock>
-                <TextBlock></TextBlock>
-
                 <!--Create playlist-->
-                <Button Style="{DynamicResource sideMenuButton}">
+                <Button Grid.Row="3" 
+                        Style="{DynamicResource sideMenuButton}"
+                        Command="{Binding CreatePlaylistCommand}"
+                        Margin="0 15 0 0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="PlusBox" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
-                            <TextBlock Text="Create Playlist" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                            <TextBlock Text="Create Playlist" Style="{DynamicResource sideMenuTitle}"/>
                         </Border>
                     </StackPanel>
                 </Button>
 
                 <!--Favourite songs-->
-                <Button Style="{DynamicResource sideMenuButton}">
+                <Button Grid.Row="4" Style="{DynamicResource sideMenuButton}"
+                        >
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="HeartBox" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
-                            <TextBlock Text="Favourite Songs" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                            <TextBlock Text="Favourite Songs" Style="{DynamicResource sideMenuTitle}"/>
                         </Border>
                     </StackPanel>
                 </Button>
-
-                <TextBlock></TextBlock>
-                <Line Stroke="#282828" X1="0" X2="200"></Line>
-
                 
-                <ListView x:Name="playlistList"
-                              Height="233"
-                              BorderBrush="Black"
-                              Background="Black"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <!--Separate line-->
+                <Line Grid.Row="5" 
+                      Stroke="#282828" 
+                      X1="0" X2="200" 
+                      Margin="0 10 0 0"/>
+
+                <!--Playlist list-->
+                <ListView Grid.Row="6"
+                          Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid},Path=RowDefinitions[6].Height}"
+                          x:Name="playlistList"
+                          BorderBrush="Black"
+                          Background="Black"
+                          ItemsSource="{Binding Playlists}"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                                                <RowDefinition Height="0.00001*"/>
+                                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                                            </Grid.RowDefinitions>
+                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Row="1" />
+                                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
+                                                <Track.DecreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource RepeatButtonTransparent}" HorizontalAlignment="Left" Width="17"/>
+                                                </Track.DecreaseRepeatButton>
+                                                <Track.IncreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                </Track.IncreaseRepeatButton>
+                                                <Track.Thumb>
+                                                    <Thumb Style="{StaticResource ScrollBarThumbVertical}" Margin="2"/>
+                                                </Track.Thumb>
+                                            </Track>
+                                        </Grid>
+
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.Resources>
+                    
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="#909090"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -94,23 +145,34 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Foreground" Value="#909090"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </ListView.ItemContainerStyle>
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding}" Style="{DynamicResource sideMenuTitle}"
-                                               FontSize="14" FontFamily="Gotham Rounded Book"
-                                               Margin="0 20 0 0"
-                                               HorizontalAlignment="Left">
-
-                                </TextBlock>
+                                <Button Style="{DynamicResource sideMenuButton}"
+                                        Margin="0 10 0 0"
+                                        Height="20"
+                                        Background="Transparent">
+                                    <TextBlock Text="{Binding Name}" Style="{DynamicResource sideMenuTitle}"
+                                                   FontSize="14" FontFamily="{DynamicResource MainFont}"
+                                                   HorizontalAlignment="Left"/>
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
