@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVM_Basics.EventAndCommandHandlers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels
 {
-    public class ControlBarViewModel : BaseViewModel
+    public class ControlBarViewModel : ViewModelBase
     {
         #region Commands
         public ICommand CloseWindowCommand { get; set; }
@@ -24,7 +25,7 @@ namespace MVVM_Basics.ViewModels
                 (p) => { return true; },
                 (p) => 
                 {
-                    Window parent = GetRootParent(p) as Window;
+                    Window parent = (GetRootParent(p) as Window)!;
 
                     if (parent!=null)
                         parent.Close();
@@ -36,7 +37,7 @@ namespace MVVM_Basics.ViewModels
                 (p) => { return true; },
                 (p) =>
                 {
-                    Window parent = GetRootParent(p) as Window;
+                    Window parent = (GetRootParent(p) as Window)!;
 
                     if (parent != null)
                     {
@@ -57,7 +58,7 @@ namespace MVVM_Basics.ViewModels
                 (p) => { return true; },
                 (p) =>
                 {
-                    Window parent = GetRootParent(p) as Window;
+                    Window parent = (GetRootParent(p) as Window)!;
 
                     if (parent != null)
                         parent.WindowState = WindowState.Minimized;
@@ -71,7 +72,7 @@ namespace MVVM_Basics.ViewModels
 
             while (parent.Parent != null)
             {
-                parent = parent.Parent as FrameworkElement;
+                parent = (parent.Parent as FrameworkElement)!;
             }
 
             return parent;
