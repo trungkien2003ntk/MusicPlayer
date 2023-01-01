@@ -1,6 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using Microsoft.WindowsAPICodePack.Shell;
-using MVVM_Basics.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,26 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MaterialDesignThemes.Wpf;
+using MVVM_Basics.Interfaces;
 
 namespace MVVM_Basics.Views
 {
-    /// <summary>
-    /// Interaction logic for SongControl.xaml
-    /// </summary>
     public partial class SongControl : UserControl
     {
         ISoundPlayer _SoundPlayer;
         double savedSliderVolumeValue;
 
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SongControl()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
 
