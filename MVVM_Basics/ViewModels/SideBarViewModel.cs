@@ -1,28 +1,27 @@
 ﻿using MVVM_Basics.Models;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using MVVM_Basics.EventAndCommandHandlers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MVVM_Basics.ViewModels
 {
-    public class SideBarViewModel : BaseViewModel
+    public class SideBarViewModel : ViewModelBase
     {
         #region Commands
         public ICommand CreatePlaylistCommand { get; set; }
-
         #endregion Commands
 
+        public int? LoginedUserId { get; set; }
         public ObservableCollection<Playlist> Playlists { get; set ; }
-        
 
         public SideBarViewModel()
         {
+            LoginedUserId = App.AppHost!.Services.GetRequiredService<MainWindowViewModel>().LoginedUserId;
+
             Playlists = new ObservableCollection<Playlist>();
 
             PopulateCollection();
@@ -32,7 +31,7 @@ namespace MVVM_Basics.ViewModels
                 (p) => { return true; },
                 (p) =>
                 {
-                    Playlists.Add(new Playlist() { Name = "My playlist", CreatedDate = DateTime.Now, Description = "", UsersId = MainViewModel.LoginedUser.Id }); ;
+                    Playlists.Add(new Playlist() { Name = "My playlist", CreatedDate = DateTime.Now, Description = "", UsersId = LoginedUserId }); ;
                     OnPropertyChanged(nameof(Playlists));
                 }
             );
@@ -40,11 +39,15 @@ namespace MVVM_Basics.ViewModels
 
         private void PopulateCollection()
         {
-            var playlists = DataProvider.Ins.DB.Playlists
-                            .Where(s => s.UsersId == MainViewModel.LoginedUser.Id);
+            using (var database = new MusicPlayerVpContext())
+            {
+                var playlists = database.Playlists
+                            .Where(s => s.UsersId == LoginedUserId);
 
-            foreach (Playlist playlist in playlists)
-                Playlists.Add(playlist);
+                foreach (Playlist playlist in playlists)
+                    Playlists.Add(playlist);
+            }
+
         }
     }
 }
