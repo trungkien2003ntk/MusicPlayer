@@ -1,8 +1,7 @@
 ﻿<Application x:Class="MVVM_Basics.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MVVM_Basics"
-             StartupUri="./Views/MainWindow.xaml">
+             xmlns:local="clr-namespace:MVVM_Basics">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,6 +15,7 @@
                 <ResourceDictionary Source="/ResourcesXAML/TrackControlResource.xaml"/>
                 <ResourceDictionary Source="/ResourcesXAML/ScrollBarResource.xaml"/>
                 <ResourceDictionary Source="/ResourcesXAML/PlaylistResource.xaml"/>
+                <ResourceDictionary Source="/ResourcesXAML/SideBarResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
