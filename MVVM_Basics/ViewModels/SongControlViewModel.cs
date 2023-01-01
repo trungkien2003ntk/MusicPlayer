@@ -1,16 +1,15 @@
 ﻿using Id3;
+using MVVM_Basics.Interfaces;
 using MVVM_Basics.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace MVVM_Basics.ViewModels
 {
-    public class SongControlViewModel : BaseViewModel, ISoundPlayer
+    public class SongControlViewModel : ViewModelBase, ISoundPlayer
     {
         #region Static 
         public static Queue<Song> songQueue = new Queue<Song>();
@@ -60,7 +59,9 @@ namespace MVVM_Basics.ViewModels
 
 
         #region Constructor
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SongControlViewModel()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             // Set for testing UI
             CurrentPlayingSong.PcLink = MusicPath;
@@ -87,9 +88,9 @@ namespace MVVM_Basics.ViewModels
         #endregion Constructor
 
 
-        private static BitmapImage LoadImage(byte[] imageData)
+        private BitmapImage LoadImage(byte[] imageData)
         {
-            if (imageData == null || imageData.Length == 0) return null;
+            if (imageData == null || imageData.Length == 0) return new BitmapImage();
             var image = new BitmapImage();
             using (var mem = new MemoryStream(imageData))
             {
@@ -105,6 +106,7 @@ namespace MVVM_Basics.ViewModels
             return image;
         }
 
+        // For reference
         public static void ReadID3()
         {
             string[] musicFiles = Directory.GetFiles(@"C:\Users\ADMIN\Downloads\Music\Songs", "*.mp3");
