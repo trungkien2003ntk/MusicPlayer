@@ -15,7 +15,6 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MainFont}"
         
-        DataContext="{DynamicResource MainVM}"
         WindowStyle="None"
         xmlns:views="clr-namespace:MVVM_Basics.Views"
         Title="MainWindow" Height="700" Width="1050">
@@ -33,8 +32,8 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <views:Playlist Grid.Column="1"></views:Playlist>    
-                
+            <ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding CurrentViewModel}"/>
+
             <views:ControlBar
                 Grid.Row="0" Grid.Column="1" 
                 VerticalAlignment="Top" HorizontalAlignment="Right"/>
