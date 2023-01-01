@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Basics.Views"
              
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
@@ -19,7 +21,11 @@
              Width="250"
              d:DesignHeight="583" d:DesignWidth="250">
     <Grid>
-        <Border Background="Black" CornerRadius="20 0 0 0" Grid.Column="0" Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="124*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Background="Black" CornerRadius="20 0 0 0" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <Grid Margin="20 10 0 0" x:Name="MainGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="45"/>
@@ -41,9 +47,12 @@
                 <!--Home-->
                 <Button Grid.Row="1"
                         Style="{DynamicResource sideMenuButton}"
-                        Margin="0">
+                        Margin="0"
+                        Command="{Binding DataContext.DisplayHomePageCommand, 
+                                  RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                  Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Home" Style="{DynamicResource sideMenuIcon}"/>
+                        <materialDesign:PackIcon Kind="HomeOutline" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
                             <TextBlock Text="Home" Style="{DynamicResource sideMenuTitle}">
                             </TextBlock>
@@ -54,7 +63,10 @@
                 <!--Search-->
                 <Button Grid.Row="2"
                         Margin="0 0 0 15"
-                        Style="{DynamicResource sideMenuButton}">
+                        Style="{DynamicResource sideMenuButton}"
+                        Command="{Binding DataContext.DisplaySearchPageCommand, 
+                                  RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                  Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Magnify" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
@@ -77,8 +89,7 @@
                 </Button>
 
                 <!--Favourite songs-->
-                <Button Grid.Row="4" Style="{DynamicResource sideMenuButton}"
-                        >
+                <Button Grid.Row="4" Style="{DynamicResource sideMenuButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="HeartBox" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
@@ -86,7 +97,7 @@
                         </Border>
                     </StackPanel>
                 </Button>
-                
+
                 <!--Separate line-->
                 <Line Grid.Row="5" 
                       Stroke="#282828" 
@@ -95,12 +106,8 @@
 
                 <!--Playlist list-->
                 <ListView Grid.Row="6"
-                          Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid},Path=RowDefinitions[6].Height}"
                           x:Name="playlistList"
-                          BorderBrush="Black"
-                          Background="Black"
-                          ItemsSource="{Binding Playlists}"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                          Style="{DynamicResource playlistListStyle}">
                     <ListView.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -133,7 +140,7 @@
                             </Setter>
                         </Style>
                     </ListView.Resources>
-                    
+
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Background" Value="Transparent" />
@@ -163,7 +170,12 @@
                                 <Button Style="{DynamicResource sideMenuButton}"
                                         Margin="0 10 0 0"
                                         Height="20"
-                                        Background="Transparent">
+                                        Background="Transparent"
+                                        Command="{Binding DataContext.DisplayPlaylistPageCommand, 
+                                                          RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                                          Mode=OneWay}"
+                                        CommandParameter="{Binding}"
+                                        >
                                     <TextBlock Text="{Binding Name}" Style="{DynamicResource sideMenuTitle}"
                                                    FontSize="14" FontFamily="{DynamicResource MainFont}"
                                                    HorizontalAlignment="Left"/>
