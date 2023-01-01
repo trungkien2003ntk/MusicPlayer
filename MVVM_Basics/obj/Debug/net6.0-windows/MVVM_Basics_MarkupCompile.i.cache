@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\App.xaml
-10-1378613992
+121048644249
 
-31-104228577
-2381979671086
-ResourcesXAML\MainResource.xaml;ResourcesXAML\PlaylistResource.xaml;ResourcesXAML\ScrollBarResource.xaml;ResourcesXAML\TrackControlResource.xaml;Views\ControlBar.xaml;Views\HomePage.xaml;Views\MainWindow.xaml;Views\Playlist.xaml;Views\SideBar.xaml;Views\SongControl.xaml;
+39-775400768
+248-578888374
+ResourcesXAML\MainResource.xaml;ResourcesXAML\PlaylistResource.xaml;ResourcesXAML\ScrollBarResource.xaml;ResourcesXAML\SideBarResource.xaml;ResourcesXAML\TrackControlResource.xaml;Views\ControlBar.xaml;Views\HomePage.xaml;Views\MainWindow.xaml;Views\PlaylistPage.xaml;Views\SearchPage.xaml;Views\SideBar.xaml;Views\SongControl.xaml;
 
 True
 

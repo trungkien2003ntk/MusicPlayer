@@ -13,7 +13,10 @@
     <Compile Update="Views\HomePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Playlist.xaml.cs">
+    <Compile Update="Views\PlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SearchPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SideBar.xaml.cs">
@@ -24,6 +27,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="ResourcesXAML\SideBarResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -45,7 +51,10 @@
     <Page Update="Views\HomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Playlist.xaml">
+    <Page Update="Views\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SearchPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SideBar.xaml">
