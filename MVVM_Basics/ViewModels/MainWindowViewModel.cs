@@ -1,95 +1,121 @@
 ﻿using System;
-using System.Linq;
 using MVVM_Basics.Models;
 using System.Windows.Input;
-using MVVM_Basics.Factories;
 using System.Windows.Controls;
 using MVVM_Basics.EventAndCommandHandlers;
 using Microsoft.Extensions.DependencyInjection;
-using System.ComponentModel;
 
-namespace MVVM_Basics.ViewModels
+namespace MVVM_Basics.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase
 {
-    public class MainWindowViewModel : ViewModelBase
+    public ICommand? DisplayHomePageCommand { get; set; }
+    public ICommand? DisplaySearchPageCommand { get; set; }
+    public ICommand? DisplayPlaylistPageCommand { get; set; }
+    public ICommand? DisplayLibraryPageCommand { get; set; }
+    public ICommand? DisplayQueuePageCommand { get; set; }
+
+
+
+    private readonly IServiceProvider _ServiceProvider;
+    private readonly ISharedDataContext _SharedDataContext;
+
+
+    private PageType _CurrentPageType;
+    public PageType CurrentPageType
     {
-        #region Commands
-        public ICommand DisplayHomePageCommand { get; set; }
-        public ICommand DisplaySearchPageCommand { get; set; }
-        public ICommand DisplayPlaylistPageCommand { get; set; }
-        #endregion Commands
+        get { return _CurrentPageType; }
+        set { _CurrentPageType = value; }
+    }
 
 
-        #region Fields
-        private int? _LoginedUser;
-        private PageType _CurrentPageType;
-        private ViewModelBase _CurrentViewModel;
-        #endregion Fields
+    private ViewModelBase _CurrentViewModel;
+    public ViewModelBase CurrentViewModel
+    {
+        get { return _CurrentViewModel; }
+        set { _CurrentViewModel = value; OnPropertyChanged(); }
+    }
 
+    public MainWindowViewModel()
+    {
 
-        #region Properties
-        public int? LoginedUserId { get => _LoginedUser; set { _LoginedUser = value; } }
-        public PageType CurrentPageType { get => _CurrentPageType; set { _CurrentPageType = value; OnPropertyChanged(); } }
-        public ViewModelBase CurrentViewModel { get => _CurrentViewModel; set { _CurrentViewModel = value; OnPropertyChanged(); } }
-        #endregion Properties
+    }
 
+    public MainWindowViewModel(IServiceProvider serviceProvider)
+    {
+        _ServiceProvider = serviceProvider;
+        _SharedDataContext = _ServiceProvider.GetRequiredService<ISharedDataContext>();
+        _CurrentViewModel = _ServiceProvider.GetRequiredService<HomePageViewModel>();
 
-        #region Constructors
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public MainWindowViewModel()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        {
+        InitializeCommands();
+    }
 
-            using (var _Database = new MusicPlayerVpContext())
+    private void InitializeCommands()
+    {
+        DisplayHomePageCommand = new RelayCommand<UserControl>
+        (
+            (p) => { return true; },
+            (p) =>
             {
-                LoginedUserId = _Database.Users.First().Id;
-            }
-
-            _CurrentViewModel = App.AppHost!.Services.GetRequiredService<HomePageViewModel>();
-
-            InitializeCommands();
-        }
-
-        private void InitializeCommands()
-        {
-            DisplayHomePageCommand = new RelayCommand<UserControl>
-            (
-                (p) => { return true; },
-                (p) =>
+                if (CurrentPageType != PageType.HomePage)
                 {
-                    if (CurrentPageType != PageType.HomePage)
-                    {
-                        CurrentViewModel = App.AppHost!.Services.GetRequiredService<HomePageViewModel>();
-                        CurrentPageType = PageType.HomePage;
-                    }
+                    CurrentViewModel = _ServiceProvider.GetRequiredService<HomePageViewModel>();
+                    CurrentPageType = PageType.HomePage;
                 }
-            );
+            }
+        );
 
-            DisplaySearchPageCommand = new RelayCommand<UserControl>
-            (
-               (p) => { return true; },
-               (p) =>
+        DisplaySearchPageCommand = new RelayCommand<UserControl>
+        (
+           (p) => { return true; },
+           (p) =>
+           {
+               if (CurrentPageType != PageType.SearchPage)
                {
-                   if (CurrentPageType != PageType.SearchPage)
-                   {
-                       CurrentViewModel = App.AppHost!.Services.GetRequiredService<SearchPageViewModel>();
-                       CurrentPageType = PageType.SearchPage;
-                   }
+                   CurrentViewModel = _ServiceProvider.GetRequiredService<SearchPageViewModel>();
+                   CurrentPageType = PageType.SearchPage;
                }
-            );
+           }
+        );
 
-            DisplayPlaylistPageCommand = new RelayCommand<Playlist>
-            (
-               (p) => { return true; },
-               (p) =>
+        DisplayPlaylistPageCommand = new RelayCommand<Playlist>
+        (
+           (p) => { return true; },
+           (p) =>
+           {
+               if (CurrentPageType != PageType.PlaylistPage || p.Id != ((PlaylistPageViewModel)CurrentViewModel).CurrentPlaylist?.Id)
                {
-                   if (CurrentPageType != PageType.PlaylistPage || p.Id != ((PlaylistViewModel)CurrentViewModel).CurrentPlaylist.Id)
-                   {
-                       CurrentViewModel = new PlaylistViewModel(p);
-                       CurrentPageType = PageType.PlaylistPage;
-                   }
+                   _SharedDataContext.CurrentOpeningPlaylist = p;
+                   CurrentViewModel = _ServiceProvider.GetRequiredService<PlaylistPageViewModel>();
+                   CurrentPageType = PageType.PlaylistPage;
                }
-            );
-        }
-        #endregion Constructors
+           }
+        );
+
+        DisplayLibraryPageCommand = new RelayCommand<UserControl>
+        (
+           (p) => { return true; },
+           (p) =>
+           {
+               if (CurrentPageType != PageType.LibraryPage)
+               {
+                   CurrentViewModel = _ServiceProvider.GetRequiredService<LibraryPageViewModel>();
+                   CurrentPageType = PageType.LibraryPage;
+               }
+           }
+        );
+
+        DisplayQueuePageCommand = new RelayCommand<UserControl>
+        (
+           (p) => { return true; },
+           (p) =>
+           {
+               if (CurrentPageType != PageType.QueuePage)
+               {
+                   CurrentViewModel = _ServiceProvider.GetRequiredService<QueuePageViewModel>();
+                   CurrentPageType = PageType.QueuePage;
+               }
+           }
+        );
     }
 }

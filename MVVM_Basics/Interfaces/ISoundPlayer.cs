@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVVM_Basics.Interfaces
 {
@@ -12,6 +8,6 @@ namespace MVVM_Basics.Interfaces
         event Action Pause;
 
         public delegate void ChangeSong(string songPath);
-        //public event ChangeSong? OnSongChanged;
+        public event ChangeSong? OnSongChanged;
     }
 }

@@ -14,7 +14,6 @@
              FontFamily="{DynamicResource MainFont}"
              xmlns:viewmodel="clr-namespace:MVVM_Basics.ViewModels"
              
-             d:DataContext="{DynamicResource PlaylistVM}"
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="800">
     <ScrollViewer CanContentScroll="True">
@@ -78,13 +77,14 @@
                         Width="60" Height="60"
                         
                         Content="{materialDesign:PackIcon Kind=Play,Size=40}"/>
-                <ToggleButton Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
+
+                <ToggleButton ToolTip="Save to Library"
+                              Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
                               Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
-                              ToolTip="MaterialDesignFlatPrimaryToggleButton"
-                              IsChecked="True"
-                              >
-                    
-                </ToggleButton>
+                              Background="#1ed55f"
+                              Margin="20 0 0 0"
+                              Foreground="#f9f9f9"
+                              IsChecked="True"/>
 
                 <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
                         Content="{materialDesign:PackIcon Kind=DownloadCircleOutline,Size=40}"
@@ -96,7 +96,8 @@
 
             </DockPanel>
 
-            <ListView Grid.Row="2" Style="{DynamicResource songListStyle}">
+            <ListView Grid.Row="2" Style="{DynamicResource songListStyle}"
+                      ItemsSource="{Binding CurrentPlaylist}">
                 
             </ListView>
         </Grid>

@@ -11,6 +11,8 @@ public enum PageType
     HomePage,
     SearchPage,
     PlaylistPage,
+    LibraryPage,
+    QueuePage,
 }
 
 public class ViewModelBase : INotifyPropertyChanged

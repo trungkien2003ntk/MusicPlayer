@@ -245,12 +245,8 @@ public partial class MusicPlayerVpContext : DbContext
                 .HasColumnName("lastest_play_date");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Plays).HasColumnName("plays");
-            entity.Property(e => e.StorageLink)
-                .IsUnicode(false)
-                .HasColumnName("storage_link");
-            entity.Property(e => e.PcLink)
-                .IsUnicode(false)
-                .HasColumnName("pc_link");
+            entity.Property(e => e.StorageLink).HasColumnName("storage_link");
+            entity.Property(e => e.PcLink).HasColumnName("pc_link");
         });
 
         modelBuilder.Entity<SongArtist>(entity =>

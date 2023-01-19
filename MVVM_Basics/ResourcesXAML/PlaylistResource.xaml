@@ -1,54 +1,241 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:converter="clr-namespace:MVVM_Basics.Views.Converter"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="songListStyle" TargetType="ListView">
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="ItemContainerStyle">
+    <converter:SongToSongTitleCoverter x:Key="SongToSongTitleCoverter"/>
+    <converter:SongToSongCoverImageConverter x:Key="SongToSongCoverImageConverter"/>
+    <converter:SongToSongDurationCoverter x:Key="SongToSongDurationCoverter"/>
+    <converter:SongToSongArtistConverter x:Key="SongToSongArtistConverter"/>
+    <converter:ItemIndexConverter x:Key="ItemIndexConverter"/>
+
+    <LinearGradientBrush x:Key="MenuPopupBrush"
+                     EndPoint="0.5,1"
+                     StartPoint="0.5,0">
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="0" />
+        <GradientStop Color="{DynamicResource ControlMediumColor}"
+                Offset="0.5" />
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="1" />
+    </LinearGradientBrush>
+    
+    <Color x:Key="BorderMediumColor">#525252</Color>
+
+    <Style x:Key="SongElementBackgroundStyle" TargetType="DockPanel">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#303030"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                          AncestorType={x:Type ListViewItem}}, 
+                                           Path=IsSelected}" 
+                         Value="True">
+                <Setter Property="Background" Value="#303030"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!--Item's GridView to get the header for sorting... (Not using yet)-->
+    <GridView x:Key="ItemView">
+        <GridViewColumn x:Name="column2"
+                                    Header="Title"
+                                    Width="650">
+            <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="4" Name="BackgroundBorder" Style="{StaticResource SongElementBackgroundStyle}">
+                        <!--Cover image-->
+                        <Image Source="{Binding Path=.,Converter={StaticResource SongToSongCoverImageConverter}}" Width="40" Height="40" DockPanel.Dock="Left" Margin="10 0 0 0"/>
+
+                        <Grid Margin="20 0 0 0">
+                            <!--Song Name-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongTitleCoverter}}" Foreground="White" Margin="0 0 0 0" VerticalAlignment="Top"/>
+
+                            <!--Artist-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongArtistConverter}}" Foreground="LightGray" Margin="0 3 0 0" VerticalAlignment="Bottom"/>
+                        </Grid>
+                    </DockPanel>
+                </DataTemplate>
+            </GridViewColumn.CellTemplate>
+        </GridViewColumn>
+        <GridViewColumn x:Name="column3"
+                        Header="Duration"
+                        Width="auto">
+            <GridViewColumn.CellTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="4" Name="BackgroundBorder" Style="{StaticResource SongElementBackgroundStyle}">
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0">
+                            <!--Duration-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongDurationCoverter},StringFormat='{}{0:mm\\:ss}'}" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Medium" Foreground="Gray" Margin="10"/>
+                        </Grid>
+                    </DockPanel>
+                </DataTemplate>
+            </GridViewColumn.CellTemplate>
+        </GridViewColumn>
+    </GridView>
+
+    <ControlTemplate x:Key="ContextMenuTemplate" TargetType="ContextMenu">
+        <Border CornerRadius="5" BorderBrush="Transparent" BorderThickness="1" Background="{Binding Path=Background,RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" SnapsToDevicePixels="True">
+            <ItemsPresenter />
+        </Border>
+    </ControlTemplate>
+
+    <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
+        <StackPanel Margin="-20,0,0,0" Background="{StaticResource ContextMenuNormalBackground}"/>
+    </ItemsPanelTemplate>
+
+    <!--Separator-->
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}"
+       TargetType="{x:Type Separator}">
+        <Setter Property="Height"
+          Value="1" />
+        <Setter Property="Margin"
+          Value="0,4,0,4" />
+        <Setter Property="Template">
             <Setter.Value>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <ContentPresenter/>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Border BorderThickness="1">
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                        </Border.BorderBrush>
+                    </Border>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
 
-        <Setter Property="ItemTemplate">
+    <!--Song's ContextMenu-->
+    <ContextMenu x:Key="ContextMenuSong" Placement="Top"
+                 Background="{StaticResource ContextMenuNormalBackground}"
+                 Foreground="White"
+                 Margin="0"
+                 ItemsPanel="{StaticResource MenuItemPanelTemplate}"
+                 BorderThickness="0"
+                 >
+        <ContextMenu.Resources>
+            <Style TargetType="MenuItem">
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}, Path=Background}"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource ContextMenuHoverBackground}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="{x:Type Separator}">
+                <Setter Property="Background" Value="#525252"/>
+                <Setter Property="Margin" Value="0,2,0,2"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Separator}">
+                            <Border 
+                                BorderBrush="Blue" 
+                                BorderThickness="2"
+                                Background="#525252" 
+                                Height="1" 
+                                SnapsToDevicePixels="true"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ContextMenu.Resources>
+        
+        <MenuItem Header="Add to Queue" Command="{Binding}"/>
+        <Separator/>
+        <MenuItem Header="Test1">
+            <MenuItem Header="Test1_sub"/>
+            <MenuItem Header="Test1_sub1"/>
+            <TextBox Text="Test"></TextBox>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Add to your Liked Songs"/>
+        <MenuItem Header="Add to playlist" ItemsSource="{Binding AllPlaylistNames}">
+            <!--List of playlist-->
+        </MenuItem>
+    </ContextMenu>
+
+    <!--Song's template-->
+    <Style x:Key="songItemStyle" TargetType="ListViewItem">
+        <Setter Property="Tag" Value="{Binding}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <ContentPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <DockPanel Margin="4" Name="BackgroundBorder">
-                        <DockPanel.Style>
-                            <Style TargetType="DockPanel">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#303030"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
+                    <DockPanel Margin="4" Name="BackgroundBorder" Style="{StaticResource SongElementBackgroundStyle}">
+                        <!--#region Song Element-->
+                        <!--Cover image-->
+                        <Image Source="{Binding Path=.,Converter={StaticResource SongToSongCoverImageConverter}}" Width="40" Height="40" DockPanel.Dock="Left" Margin="20 10 0 10"/>
 
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                                  AncestorType={x:Type ListViewItem}}, 
-                                                                   Path=IsSelected}" 
-                                                 Value="True">
-                                        <Setter Property="Background" Value="#303030"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DockPanel.Style>
+                        <Grid Margin="20 0 0 0">
+                            <!--Song Name-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongTitleCoverter}}" Foreground="White" Margin="0 10 0 5" VerticalAlignment="Top"/>
 
-                        <!--Song elements-->
+                            <!--Artist-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongArtistConverter}}" Foreground="LightGray" Margin="0 10 0 7" VerticalAlignment="Bottom"/>
+                        </Grid>
+
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0">
+                            <!--Duration-->
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongDurationCoverter},StringFormat='{}{0:mm\\:ss}'}" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Medium" Foreground="Gray" Margin="10"/>
+                        </Grid>
                     </DockPanel>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
+    <Style x:Key="songListStyle" TargetType="ListView">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="ContextMenu" Value="{StaticResource ContextMenuSong}"/>
+        <Setter Property="FontFamily" Value="{StaticResource CircularBook}"/>
+        <Setter Property="FontSize" Value="15"/>
+
+        <Setter Property="ItemContainerStyle" Value="{StaticResource songItemStyle}">
+        </Setter>
+
+        <!--<Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <DockPanel Margin="4" Name="BackgroundBorder" Style="{StaticResource SongElementBackgroundStyle}">
+                        --><!--Cover image--><!--
+                        <Image Source="{Binding Path=.,Converter={StaticResource SongToSongCoverImageConverter}}" Width="40" Height="40" DockPanel.Dock="Left" Margin="20 10 0 10"/>
+
+                        <Grid Margin="20 0 0 0">
+                            --><!--Song Name--><!--
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongTitleCoverter}}" Foreground="White" Margin="0 10 0 5" VerticalAlignment="Top"/>
+                            
+                            --><!--Artist--><!--
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongArtistConverter}}" Foreground="LightGray" Margin="0 10 0 7" VerticalAlignment="Bottom"/>
+                        </Grid>
+
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0">
+                            --><!--Duration--><!--
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongDurationCoverter},StringFormat='{}{0:mm\\:ss}'}" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Medium" Foreground="Gray" Margin="10"/>
+                        </Grid>
+                    </DockPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+    
     <Style x:Key="txblPlaylistTitleStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource CircularBlack}"/>
         <Setter Property="FontSize" Value="14"/>    
@@ -56,6 +243,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Margin" Value="5"/>
     </Style>
+    
     
     <Style x:Key="txblPlaylistInfoStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource MainFont}"/>

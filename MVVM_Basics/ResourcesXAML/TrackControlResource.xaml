@@ -136,6 +136,7 @@
     <!--#endregion-->
 
     <Style x:Key="trackControlTxblDuration" TargetType="TextBlock">
+        <Setter Property="Margin" Value="4"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>

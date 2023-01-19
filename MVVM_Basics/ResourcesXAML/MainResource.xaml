@@ -2,36 +2,47 @@
                     xmlns:viewmodel="clr-namespace:MVVM_Basics.ViewModels"
                     xmlns:view="clr-namespace:MVVM_Basics.Views"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:converters="clr-namespace:MVVM_Basics.Views.Converter"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Images-->
+    <BitmapImage x:Key="DefaultPlaylistCoverImage" UriSource="pack://application:,,,/Images/DefaultPlaylistCoverImage.jpeg"/>
+    
     <!-- View  model -->
-    <viewmodel:MainWindowViewModel x:Key="MainVM"/>
-    <viewmodel:ControlBarViewModel x:Key="ControlBarVM"/>
-    <viewmodel:SongControlViewModel x:Key="SongControlVM"/>
-    <viewmodel:SideBarViewModel x:Key="SideBarVM"/>
+    <viewmodel:TitleBarViewModel x:Key="ControlBarVM"/>
     <viewmodel:HomePageViewModel x:Key="HomePageVM"/>
-    <viewmodel:PlaylistViewModel x:Key="PlaylistVM"/>
+    <viewmodel:QueuePageViewModel x:Key="QueuePageVM"/>
 
 
     <!--DataTemplates-->
-    <DataTemplate DataType="{x:Type viewmodel:MainWindowViewModel}">
-        <view:MainWindow/>
-    </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodel:HomePageViewModel}">
         <view:HomePage />
     </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodel:SearchPageViewModel}">
         <view:SearchPage/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodel:PlaylistViewModel}">
+    <DataTemplate DataType="{x:Type viewmodel:PlaylistPageViewModel}">
         <view:PlaylistPage/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodel:LibraryPageViewModel}">
+        <view:LibraryPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodel:QueuePageViewModel}">
+        <view:QueuePage/>
+    </DataTemplate>
     
+
+    
+
     <!-- Font Family -->
     <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Circular Std Light"</FontFamily>
     <FontFamily x:Key="CircularBlack">pack://application:,,,/Fonts/#Circular Std Black</FontFamily>
     <FontFamily x:Key="CircularBook">pack://application:,,,/Fonts/#Circular Std Book</FontFamily>
         
-    <!--Background Gradient Color-->
+    <!--Solid color-->
+    <SolidColorBrush x:Key="ContextMenuNormalBackground" Color="#282828"/>
+    <SolidColorBrush x:Key="ContextMenuHoverBackground" Color="#3e3e3e"/>
+
+    <!--Gradient Color-->
     <LinearGradientBrush x:Key="gradientHomeBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#222222" Offset="0"/>
         <GradientStop Color="#121212" Offset="1"/>

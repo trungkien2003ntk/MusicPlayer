@@ -12,18 +12,30 @@
              TextOptions.TextRenderingMode="Auto"
              FontFamily="{DynamicResource MainFont}"
              
-             DataContext="{DynamicResource SongControlVM}"
              Background="#181818"
-             xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
-             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+             xmlns:custom_converters="clr-namespace:MVVM_Basics.Views.Converter"
              xmlns:local="clr-namespace:MVVM_Basics.Views"
+                
              mc:Ignorable="d" 
              Height="90"
+             
              d:DesignHeight="90" d:DesignWidth="1050">
+    <UserControl.Resources>
+        <custom_converters:SongToSongCoverImageConverter x:Key="SongToSongCoverImageConverter"/>
+        <custom_converters:SongToSongTitleCoverter x:Key="SongToSongTitleConverter"/>
+        <custom_converters:SongToSongArtistConverter x:Key="SongToSongArtistConverter"/>
+        <custom_converters:SongToSongPcPathCoverter x:Key="SongToSongPcPathCoverter"/>
+        <custom_converters:SongToSongDurationCoverter x:Key="SongToSongDurationCoverter"/>
+        <custom_converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
+        <custom_converters:DoubleToTimeSpanConverter x:Key="DoubleToTimeSpanConverter"/>
+        <custom_converters:SongToSongDurationDoubleCoverter x:Key="SongToSongDurationDoubleCoverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="0.9*"/>
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="0.8*"/>
         </Grid.ColumnDefinitions>
@@ -32,7 +44,7 @@
                     Orientation="Horizontal" Background="#181818">
             <Image Margin="13"
                Stretch="Uniform"
-               Source="{Binding Thumbnail}"
+               Source="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongCoverImageConverter}}"
                />
             <Grid>
                 <Grid.RowDefinitions>
@@ -40,13 +52,16 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
+                <!--Title-->
                 <TextBlock Grid.Row="0"
                        Style="{DynamicResource currentPlayingSongTitle}"
-                       ToolTip="{Binding Title}"
-                       Text="{Binding Title}"/>
+                       ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}"
+                       Text="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongTitleConverter}}"/>
+                
+                <!--Artist-->
                 <TextBlock Grid.Row="1" 
                        Style="{DynamicResource currentPlayingSongArtist}"
-                       Text ="{Binding Artist}"/>
+                       Text ="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongArtistConverter}}"/>
             </Grid>
             <ToggleButton Margin="15"
                       ToolTip="Save to Library"
@@ -64,7 +79,10 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <MediaElement x:Name="mediaPlayer" Volume="1" Source="{Binding Source}" LoadedBehavior="Manual" UnloadedBehavior="Manual">
+            <MediaElement x:Name="mediaPlayer" Volume="1" 
+                          Source="{Binding CurrentPlayingSong,Converter={StaticResource SongToSongPcPathCoverter}}"
+                          
+                          LoadedBehavior="Manual" UnloadedBehavior="Manual">
 
             </MediaElement>
             <Grid Name="ControllerGrid" Grid.Row="1" HorizontalAlignment="Center">
@@ -99,22 +117,27 @@
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                       x:Name="TxblPlayedDuration"
-                       Style="{DynamicResource trackControlTxblDuration}"/>
+                           x:Name="TxblPlayedDuration"
+                           Text="{Binding ElementName=sliderTime, Path=Value, Converter={StaticResource DoubleToTimeSpanConverter}, StringFormat={}{0:mm\\:ss}, Mode=OneWay}"
+                           Style="{DynamicResource trackControlTxblDuration}"/>
                 <TextBlock Grid.Column="2"
-                       x:Name="TxblTotalDuration"
-                       Style="{DynamicResource trackControlTxblDuration}"/>
+                           x:Name="TxblTotalDuration"
+                           Text="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongDurationCoverter},StringFormat={}{0:mm\\:ss}}"
+                           Style="{DynamicResource trackControlTxblDuration}"/>
 
                 <Slider x:Name="sliderTime" Grid.Column="1"
-                    Style="{DynamicResource SliderStyleTrack}"
-                    ValueChanged="sliderTime_ValueChanged"
-                    VerticalAlignment="Center"/>
+                        SmallChange="0"
+                        LargeChange="0"
+                        Maximum="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongDurationDoubleCoverter}}"
+                        Style="{DynamicResource SliderStyleTrack}"
+                        Thumb.DragCompleted="sliderTime_DragCompleted"
+                        VerticalAlignment="Center"/>
             </Grid>
         </Grid>
 
@@ -129,12 +152,16 @@
                 <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
+            <Button x:Name="btnQueue"
+                    Grid.Column="0"
                     Width="30"
                     Height="30"
                     Margin="5"
                     Content="{materialDesign:PackIcon Kind=QueueMusic,Size=25}"
                     Template="{DynamicResource ButtonTemplate1}"
+                    Command="{Binding DataContext.DisplayQueuePageCommand, 
+                                  RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                  Mode=OneWay}"
                     Style="{DynamicResource additionalControlBtn}"/>
 
             <Button x:Name="btnVolume"

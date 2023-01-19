@@ -4,7 +4,6 @@
     <Style x:Key="playlistListStyle" TargetType="ListView">
         <Setter Property="Background" Value="Black"/>
         <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="ItemsSource" Value="{Binding Playlists}"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>

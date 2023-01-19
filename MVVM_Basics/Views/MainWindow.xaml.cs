@@ -1,4 +1,4 @@
-﻿using MVVM_Basics.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MVVM_Basics.ViewModels;
 using System.Windows;
 

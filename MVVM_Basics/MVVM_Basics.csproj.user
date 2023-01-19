@@ -7,13 +7,19 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\ControlBar.xaml.cs">
+    <Compile Update="Views\TitleBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\HomePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\LibraryPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\PlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\QueuePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SearchPage.xaml.cs">
@@ -28,6 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="ResourcesXAML\SideBarResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\LibraryPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
@@ -45,13 +54,16 @@
     <Page Update="ResourcesXAML\TrackControlResource.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ControlBar.xaml">
+    <Page Update="Views\TitleBar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\HomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\QueuePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SearchPage.xaml">

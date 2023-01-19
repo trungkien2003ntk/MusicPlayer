@@ -1,136 +1,149 @@
-﻿using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using Microsoft.WindowsAPICodePack.Shell;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using MVVM_Basics.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using MVVM_Basics.ViewModels;
+using System.Windows.Threading;
 
-namespace MVVM_Basics.Views
+namespace MVVM_Basics.Views;
+
+public partial class SongControl : UserControl
 {
-    public partial class SongControl : UserControl
+    ISoundPlayer? _SoundPlayer;
+    double _SavedSliderVolumeValue;
+    DispatcherTimer timer;
+    string _TimeFormat = @"mm\:ss";
+
+    public SongControl()
     {
-        ISoundPlayer _SoundPlayer;
-        double savedSliderVolumeValue;
+        InitializeComponent();
 
+        // Register DataContextChanged event
+        DataContextChanged += OnDataContextChanged;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SongControl()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        {
-            InitializeComponent();
-
-            DataContextChanged += OnDataContextChanged;
-            Unloaded += OnUnloaded;
-
-            TxblPlayedDuration.Text = mediaPlayer.Position.ToString(@"mm\:ss");
-            TxblTotalDuration.Text = GetMediaDuration(mediaPlayer.Source.ToString()).ToString(@"mm\:ss");
-            sliderTime.Maximum = GetMediaDuration(mediaPlayer.Source.ToString()).TotalSeconds;
-        }
+        // Resolve DataContext
+        DataContext = App.AppHost!.Services.GetRequiredService<SongControlViewModel>();
         
+        // Register Unloaded Event
+        Unloaded += OnUnloaded;
 
-        void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs args)
+        // Initialize Timer
+        timer = new()
         {
-            if (DataContext is ISoundPlayer player && _SoundPlayer != player)
-            {
-                if (_SoundPlayer != null)
-                {
-                    _SoundPlayer.Play -= OnPlay;
-                    _SoundPlayer.Pause -= OnPause;
-                }
+            Interval = TimeSpan.FromSeconds(1)
+        };
 
-                _SoundPlayer = player;
-                _SoundPlayer.Play += OnPlay;
-                _SoundPlayer.Pause += OnPause;
-                //_SoundPlayer.OnSongChanged += _SoundPlayer_OnSongChanged;
-            }
-        }
+        timer.Tick += OnTimerTick;
+    }
 
-        private void _SoundPlayer_OnSongChanged(string songPath)
+    private void OnTimerTick(object? sender, EventArgs e)
+    {
+        if (mediaPlayer.Source != null)
         {
-            if (!string.IsNullOrEmpty(songPath))
-            {
-                mediaPlayer.Source = null;
-                mediaPlayer.Source = new Uri(songPath);
-            }
+            sliderTime.Value += 1;
         }
+    }
 
-        void OnUnloaded(object sender, RoutedEventArgs e)
+    void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs args)
+    {
+        if (DataContext is ISoundPlayer player && _SoundPlayer != player)
         {
             if (_SoundPlayer != null)
+            {
                 _SoundPlayer.Play -= OnPlay;
+                _SoundPlayer.Pause -= OnPause;
+            }
+
+            _SoundPlayer = player;
+            _SoundPlayer.Play += OnPlay;
+            _SoundPlayer.Pause += OnPause;
+            _SoundPlayer.OnSongChanged += _SoundPlayer_OnSongChanged;
         }
+    }
 
-        private void OnPlay() => mediaPlayer.Play();
-        private void OnPause() => mediaPlayer.Pause();
-
-        private void sliderTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void _SoundPlayer_OnSongChanged(string songPath)
+    {
+        if (!string.IsNullOrEmpty(songPath))
         {
-            TimeSpan timeSpan = TimeSpan.FromSeconds((int)sliderTime.Value);
-            TimeSpan mediaTimeSpan = new TimeSpan(0, 0, 0, 0, (int)timeSpan.TotalMilliseconds);
-
-            TxblPlayedDuration.Text = timeSpan.ToString(@"mm\:ss");
-            mediaPlayer.Position = mediaTimeSpan;
+            mediaPlayer.Source = null;
+            mediaPlayer.Source = new Uri(songPath);
+            mediaPlayer.Position = TimeSpan.Zero;
+            sliderTime.Value = 0;
+            OnPlay();
         }
+    }
 
-        private TimeSpan GetMediaDuration(string filePath)
+    void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        if (_SoundPlayer != null)
+            _SoundPlayer.Play -= OnPlay;
+    }
+
+    private void OnPlay()
+    {
+        mediaPlayer.Play();
+        timer.Start();
+    }
+
+    private void OnPause()
+    {
+        mediaPlayer.Pause();
+        timer.Stop();
+    }
+
+    private void sliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        // Change Volume Button Icon
+        PackIcon icon = new()
         {
-            using (var shell = ShellObject.FromParsingName(filePath))
-            {
-                IShellProperty prop = shell.Properties.System.Media.Duration;
-                var t = (ulong)prop.ValueAsObject;
-                return TimeSpan.FromTicks((long)t);
-            }
-        }
+            Width = 25,
+            Height = 25,
+        };
 
-        private void sliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        if (sliderVolume.Value > 60)
         {
-            // Change Volume Button Icon
-            PackIcon icon = new PackIcon()
-            {
-                Width = 25,
-                Height = 25,
-            };
-
-            if (sliderVolume.Value > 60)
-            {
-                icon.Kind = PackIconKind.VolumeHigh;
-            }
-            else if (20 < sliderVolume.Value && sliderVolume.Value <= 60) 
-            {
-                icon.Kind = PackIconKind.VolumeMedium;
-            }
-            else if (0 < sliderVolume.Value && sliderVolume.Value <= 20) 
-            {
-                icon.Kind = PackIconKind.VolumeLow;
-            }
-            else
-            {
-                icon.Kind = PackIconKind.VolumeMute;
-            }
-
-            btnVolume.Content = icon;
-
-            // Change MediaElment's Volume
-            mediaPlayer.Volume = sliderVolume.Value / 100f;
+            icon.Kind = PackIconKind.VolumeHigh;
         }
-
-        private void btnVolumeMax_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        else if (20 < sliderVolume.Value && sliderVolume.Value <= 60) 
         {
-            if (sliderVolume.Value != 0)
-            {
-                savedSliderVolumeValue = sliderVolume.Value;
-                sliderVolume.Value = 0;
-            }
-            else
-            {
-                sliderVolume.Value = savedSliderVolumeValue;
-            }
+            icon.Kind = PackIconKind.VolumeMedium;
         }
+        else if (0 < sliderVolume.Value && sliderVolume.Value <= 20) 
+        {
+            icon.Kind = PackIconKind.VolumeLow;
+        }
+        else
+        {
+            icon.Kind = PackIconKind.VolumeMute;
+        }
+
+        btnVolume.Content = icon;
+
+        // Change MediaElment's Volume
+        mediaPlayer.Volume = sliderVolume.Value / 100f;
+    }
+
+    private void btnVolumeMax_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sliderVolume.Value != 0)
+        {
+            _SavedSliderVolumeValue = sliderVolume.Value;
+            sliderVolume.Value = 0;
+        }
+        else
+        {
+            sliderVolume.Value = _SavedSliderVolumeValue;
+        }
+    }
+
+    private void sliderTime_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds((int)sliderTime.Value);
+        TimeSpan mediaTimeSpan = new(0, 0, 0, 0, (int)timeSpan.TotalMilliseconds);
+
+        mediaPlayer.Position = mediaTimeSpan;
     }
 }

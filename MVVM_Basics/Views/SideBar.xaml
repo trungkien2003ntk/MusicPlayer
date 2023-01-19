@@ -16,7 +16,8 @@
              Background="#000000"
              FontFamily="{DynamicResource MainFont}"
              
-             DataContext="{DynamicResource SideBarVM}"
+             xmlns:dviewmodels="clr-namespace:MVVM_Basics.ViewModels"
+             
              mc:Ignorable="d" 
              Width="250"
              d:DesignHeight="583" d:DesignWidth="250">
@@ -26,8 +27,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Border Background="Black" CornerRadius="20 0 0 0" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
-            <Grid Margin="20 10 0 0" x:Name="MainGrid">
+            <Grid Margin="20 5 0 0" x:Name="MainGrid">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition Height="55"/>
@@ -38,12 +40,15 @@
                 </Grid.RowDefinitions>
                 <!--Three dot menu-->
 
-                <TextBlock Grid.Row="0"
-                           Width="40" HorizontalAlignment="Left"
-                           Text="..." TextAlignment="Center"
-                           FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
-                           Foreground="White"/>
-
+                <Button Grid.Row="0"
+                              BorderThickness="0"
+                              Width="40" HorizontalAlignment="Left"
+                              Content="..."
+                              Padding="0"
+                              FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
+                              Foreground="White"
+                              Background="Transparent"/>
+                
                 <!--Home-->
                 <Button Grid.Row="1"
                         Style="{DynamicResource sideMenuButton}"
@@ -62,7 +67,7 @@
 
                 <!--Search-->
                 <Button Grid.Row="2"
-                        Margin="0 0 0 15"
+                        Margin="0 0 0 0"
                         Style="{DynamicResource sideMenuButton}"
                         Command="{Binding DataContext.DisplaySearchPageCommand, 
                                   RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
@@ -74,9 +79,23 @@
                         </Border>
                     </StackPanel>
                 </Button>
+                
+                <Button Grid.Row="3"
+                        Margin="0 0 0 15"
+                        Style="{DynamicResource sideMenuButton}"
+                        Command="{Binding DataContext.DisplayLibraryPageCommand, 
+                                  RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                  Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="LibraryOutline" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Style="{DynamicResource sideMenuTitleBorder}">
+                            <TextBlock Text="Library" Style="{DynamicResource sideMenuTitle}"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
 
                 <!--Create playlist-->
-                <Button Grid.Row="3" 
+                <Button Grid.Row="4"
                         Style="{DynamicResource sideMenuButton}"
                         Command="{Binding CreatePlaylistCommand}"
                         Margin="0 15 0 0">
@@ -89,7 +108,7 @@
                 </Button>
 
                 <!--Favourite songs-->
-                <Button Grid.Row="4" Style="{DynamicResource sideMenuButton}">
+                <Button Grid.Row="5" Style="{DynamicResource sideMenuButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="HeartBox" Style="{DynamicResource sideMenuIcon}"/>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
@@ -99,47 +118,17 @@
                 </Button>
 
                 <!--Separate line-->
-                <Line Grid.Row="5" 
+                <Line Grid.Row="6" 
                       Stroke="#282828" 
                       X1="0" X2="200" 
                       Margin="0 10 0 0"/>
 
                 <!--Playlist list-->
-                <ListView Grid.Row="6"
+                <ListView Grid.Row="7"
                           x:Name="playlistList"
-                          Style="{DynamicResource playlistListStyle}">
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ScrollBar}">
-                                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
-                                                <RowDefinition Height="0.00001*"/>
-                                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
-                                            </Grid.RowDefinitions>
-                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Row="1" />
-                                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
-                                                <Track.DecreaseRepeatButton>
-                                                    <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource RepeatButtonTransparent}" HorizontalAlignment="Left" Width="17"/>
-                                                </Track.DecreaseRepeatButton>
-                                                <Track.IncreaseRepeatButton>
-                                                    <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
-                                                </Track.IncreaseRepeatButton>
-                                                <Track.Thumb>
-                                                    <Thumb Style="{StaticResource ScrollBarThumbVertical}" Margin="2"/>
-                                                </Track.Thumb>
-                                            </Track>
-                                        </Grid>
-
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.Resources>
+                          Style="{DynamicResource playlistListStyle}"
+                          ItemsSource="{Binding Playlists, Mode=OneWay}">
+                    
 
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
