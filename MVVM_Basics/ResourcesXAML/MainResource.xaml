@@ -23,6 +23,9 @@
     <DataTemplate DataType="{x:Type viewmodel:PlaylistPageViewModel}">
         <view:PlaylistPage/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodel:LikedSongsPageViewModel}">
+        <view:LikedSongsPage/>
+    </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodel:LibraryPageViewModel}">
         <view:LibraryPage/>
     </DataTemplate>
@@ -51,6 +54,13 @@
     <LinearGradientBrush x:Key="gradientCardBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#171717" Offset="0"/>
         <GradientStop Color="#181818" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="gradientLikedSongsIcon" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#1cb050" Offset="0.0" />
+        <GradientStop Color="#22d661" Offset="0.3" />
+        <GradientStop Color="#b1d5cc" Offset="0.8" />
+        <GradientStop Color="#b1d5cc" Offset="1.0" />
     </LinearGradientBrush>
 
 
