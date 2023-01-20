@@ -14,6 +14,7 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand? DisplayPlaylistPageCommand { get; set; }
     public ICommand? DisplayLibraryPageCommand { get; set; }
     public ICommand? DisplayQueuePageCommand { get; set; }
+    public ICommand? DisplayLikedSongsPageCommand { get; set; }
 
 
 
@@ -59,6 +60,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (CurrentPageType != PageType.HomePage)
                 {
+                    CurrentViewModel.Cleanup();
                     CurrentViewModel = _ServiceProvider.GetRequiredService<HomePageViewModel>();
                     CurrentPageType = PageType.HomePage;
                 }
@@ -72,6 +74,7 @@ public class MainWindowViewModel : ViewModelBase
            {
                if (CurrentPageType != PageType.SearchPage)
                {
+                   CurrentViewModel.Cleanup();
                    CurrentViewModel = _ServiceProvider.GetRequiredService<SearchPageViewModel>();
                    CurrentPageType = PageType.SearchPage;
                }
@@ -85,6 +88,7 @@ public class MainWindowViewModel : ViewModelBase
            {
                if (CurrentPageType != PageType.PlaylistPage || p.Id != ((PlaylistPageViewModel)CurrentViewModel).CurrentPlaylist?.Id)
                {
+                   CurrentViewModel.Cleanup();
                    _SharedDataContext.CurrentOpeningPlaylist = p;
                    CurrentViewModel = _ServiceProvider.GetRequiredService<PlaylistPageViewModel>();
                    CurrentPageType = PageType.PlaylistPage;
@@ -99,6 +103,8 @@ public class MainWindowViewModel : ViewModelBase
            {
                if (CurrentPageType != PageType.LibraryPage)
                {
+                   CurrentViewModel.Cleanup();
+
                    CurrentViewModel = _ServiceProvider.GetRequiredService<LibraryPageViewModel>();
                    CurrentPageType = PageType.LibraryPage;
                }
@@ -112,8 +118,23 @@ public class MainWindowViewModel : ViewModelBase
            {
                if (CurrentPageType != PageType.QueuePage)
                {
+                   CurrentViewModel.Cleanup();
                    CurrentViewModel = _ServiceProvider.GetRequiredService<QueuePageViewModel>();
                    CurrentPageType = PageType.QueuePage;
+               }
+           }
+        );
+
+        DisplayLikedSongsPageCommand = new RelayCommand<UserControl>
+        (
+           (p) => { return true; },
+           (p) =>
+           {
+               if (CurrentPageType != PageType.LikedSongsPage)
+               {
+                   CurrentViewModel.Cleanup();
+                   CurrentViewModel = _ServiceProvider.GetRequiredService<LikedSongsPageViewModel>();
+                   CurrentPageType = PageType.LikedSongsPage;
                }
            }
         );

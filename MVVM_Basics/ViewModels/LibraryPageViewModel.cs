@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace MVVM_Basics.ViewModels;
 
@@ -18,7 +17,10 @@ public class LibraryPageViewModel : ViewModelBase
     private readonly IServiceProvider _ServiceProvider;
     private readonly ISharedDataContext _SharedDataContext;
 
+    
     public ICommand? AddSongToQueueCommand { get; set; }
+    public ICommand? ToggleLikedSongCommand { get; set; }
+
 
     private ObservableCollection<Song> _AllSongs;
     public ObservableCollection<Song> AllSongs
@@ -43,10 +45,20 @@ public class LibraryPageViewModel : ViewModelBase
         _AllSongs = new();
         _AllPlaylists = new();
 
+        Messenger.Default.Register<AddSongToQueueMessage>(this, HandleAddSongToQueue);
         PopulateCollection();
         InitializeCommands();
     }
 
+    private void HandleAddSongToQueue(AddSongToQueueMessage message)
+    {
+        var songToAdd = message.Song;
+
+        if (songToAdd != null) 
+        {
+            _SharedDataContext.AddSongToQueue(songToAdd);
+        }
+    }
 
     private void PopulateCollection()
     {
@@ -70,7 +82,37 @@ public class LibraryPageViewModel : ViewModelBase
                 (s) => { return true; },
                 (s) =>
                 {
-                    Messenger.Default.Send(new AddSongToQueueMessage(s));
+                    _SharedDataContext.AddSongToQueue(s);
+                }
+            );
+
+        ToggleLikedSongCommand = new RelayCommand<Song>
+            (
+                (s) => { return true; },
+                (s) =>
+                {
+                    using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
+
+                    var likedSongToRemove = context.LikedSongs.Where(ls => ls.UsersId == _SharedDataContext.LoginedUserId && ls.SongId == s.Id).FirstOrDefault();
+                    if (likedSongToRemove != null) 
+                    {
+                        context.LikedSongs.Remove(likedSongToRemove);
+                    }
+                    else
+                    {
+                        var likedSongToAdd = new LikedSong
+                        {
+                            UsersId = _SharedDataContext.LoginedUserId,
+                            SongId = s.Id,
+                        };
+
+                        context.LikedSongs.Add(likedSongToAdd);
+                    }
+
+                    OnPropertyChanged(nameof(s));
+                    context.SaveChanges();
+
+                    context.Dispose();
                 }
             );
     }
@@ -128,5 +170,9 @@ public class LibraryPageViewModel : ViewModelBase
             }
         }
     }
-
+    
+    public override void Cleanup()
+        {
+        Messenger.Default.Unregister(this);
+    }
 }

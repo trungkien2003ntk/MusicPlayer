@@ -1,8 +1,5 @@
-﻿using MVVM_Basics.EventAndCommandHandlers;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels;
 
@@ -13,6 +10,7 @@ public enum PageType
     PlaylistPage,
     LibraryPage,
     QueuePage,
+    LikedSongsPage,
 }
 
 public class ViewModelBase : INotifyPropertyChanged
@@ -23,4 +21,6 @@ public class ViewModelBase : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public virtual void Cleanup() { }
 }

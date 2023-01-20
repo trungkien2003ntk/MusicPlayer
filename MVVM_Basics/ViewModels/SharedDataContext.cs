@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using MVVM_Basics.Helpers;
 using MVVM_Basics.Models;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,9 @@ namespace MVVM_Basics.ViewModels
         Song? CurrentPlayingSong { get; set; }
         int LoginedUserId { get; set; }
         ObservableCollection<Playlist> AllPlaylists { get; set; }
-        ObservableCollection<Song> QueueSongs { get; set; }
+        ObservableCollection<Song> SongQueue { get; set; }
+
+        public void AddSongToQueue(Song s);
     }
 
 
@@ -54,12 +58,12 @@ namespace MVVM_Basics.ViewModels
             set { _AllPlaylists = value; }
         }
 
-        private ObservableCollection<Song> _QueueSongs;
+        private ObservableCollection<Song> _SongQueue;
 
-        public ObservableCollection<Song> QueueSongs
+        public ObservableCollection<Song> SongQueue
         {
-            get { return _QueueSongs; }
-            set { _QueueSongs = value; }
+            get { return _SongQueue; }
+            set { _SongQueue = value; }
         }
 
 
@@ -72,11 +76,11 @@ namespace MVVM_Basics.ViewModels
             _Database = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
             LoginedUserId = _Database.Users.Where(x => x.Name == "admin").FirstOrDefault()!.Id;
             CurrentOpeningPlaylist = null;
-            _QueueSongs = new();
+            _SongQueue = new();
             _AllPlaylists = new();
 
 
-            // Establist CurrentPlayingSong
+            // Startup CurrentPlayingSong
             CurrentPlayingSong = new Song()
             {
                 Id = 100,
@@ -96,5 +100,9 @@ namespace MVVM_Basics.ViewModels
                 AllPlaylists.Add(playlist);
         }
 
+        public void AddSongToQueue(Song song)
+        {
+            SongQueue.Add(song);
+        }
     }
 }

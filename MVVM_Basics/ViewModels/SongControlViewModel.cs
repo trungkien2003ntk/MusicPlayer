@@ -1,10 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using MVVM_Basics.EventAndCommandHandlers;
 using MVVM_Basics.Helpers;
 using MVVM_Basics.Interfaces;
 using MVVM_Basics.Models;
 using System;
 using System.IO;
+using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels;
 
@@ -13,6 +15,8 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
     private readonly IServiceProvider _ServiceProvider;
     private ISharedDataContext _SharedDataContext;
 
+
+    public ICommand? SkipNextCommand { get; set; }
 
     private Song _CurrentPlayingSong;
     public Song CurrentPlayingSong
@@ -61,8 +65,23 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
         }
 
         Messenger.Default.Register<ChangeSongMessage>(this, OnChangeSongMessageReceived);
+
+        InitializeCommands();
     }
 
+    private void InitializeCommands()
+    {
+        SkipNextCommand = new RelayCommand<Song>(
+            (p) => { if (_SharedDataContext.SongQueue.Count > 0) return true; return false; },
+            (p) =>
+            {
+                var nextSong = _SharedDataContext.SongQueue[0];
+
+                SkipSong(nextSong);
+
+                _SharedDataContext.SongQueue.RemoveAt(0);
+            });
+    }
 
     private bool HasASongLoaded()
     {
@@ -75,24 +94,31 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
 
         if (songToPlay != null)
         {
-            if (File.Exists(songToPlay.PcLink))
-            {
-                if (songToPlay.Id != CurrentPlayingSong.Id)
-                {
-                    CurrentPlayingSong = songToPlay;
-
-                    OnSongChanged?.Invoke(CurrentPlayingSong.PcLink);
-                    IsPlaying = true;
-                }
-            }
-            else
-            {
-                // Download song from blob storage
-            }
+            SkipSong(songToPlay);
         }
         else
         {
             // Show message song not available
         }
+    }
+
+    private void SkipSong(Song songToPlay)
+    {
+        if (File.Exists(songToPlay.PcLink))
+        {
+            if (songToPlay.Id != CurrentPlayingSong.Id)
+            {
+                CurrentPlayingSong = songToPlay;
+            }
+
+            OnSongChanged?.Invoke(CurrentPlayingSong.PcLink!);
+            IsPlaying = true;
+        }
+        else
+        {
+            // Download song from blob storage
+        }
+
+        
     }
 }

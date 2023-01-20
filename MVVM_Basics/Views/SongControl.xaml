@@ -72,6 +72,7 @@
                       IsChecked="False"/>
         </StackPanel>
 
+        <!--MediaElement and control center-->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -82,9 +83,8 @@
             <MediaElement x:Name="mediaPlayer" Volume="1" 
                           Source="{Binding CurrentPlayingSong,Converter={StaticResource SongToSongPcPathCoverter}}"
                           
-                          LoadedBehavior="Manual" UnloadedBehavior="Manual">
+                          LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
 
-            </MediaElement>
             <Grid Name="ControllerGrid" Grid.Row="1" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -92,29 +92,34 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
+                <!--Previous button-->
                 <Button Grid.Column="0"
                     Template="{DynamicResource ButtonTemplate1}"
                     Style="{DynamicResource trackControlBtnSkip}"
                     Content="{materialDesign:PackIcon Kind=SkipPrevious,Size=30}"/>
+                
+                <!--Play/pause button-->
                 <ToggleButton Grid.Column="1"
                           Background="White"
                           Foreground="Black"
                           Width="{Binding ElementName=ControllerGrid, Path=ColumnDefinitions[1].Width.Value}"
                           Height="{Binding ElementName=ControllerGrid, Path=ColumnDefinitions[1].Width.Value}"
-                          
                           Style="{DynamicResource MaterialDesignActionToggleButton}"
                           ToolTip="MaterialDesignActionLightToggleButton"
                           Content="{materialDesign:PackIcon Kind=Play,Size=30}"
                           materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Pause,Size=30}"
                           IsChecked="{Binding IsPlaying}"/>
 
+                <!--Next button-->
                 <Button Grid.Column="2" 
                     Template="{DynamicResource ButtonTemplate1}"
                     Style="{DynamicResource trackControlBtnSkip}"
+                    Command="{Binding SkipNextCommand}"
                     Content="{materialDesign:PackIcon Kind=SkipNext,Size=30}"/>
 
             </Grid>
 
+            <!--Slider and duration...-->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>

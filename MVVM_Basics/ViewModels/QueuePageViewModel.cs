@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using MVVM_Basics.Helpers;
 using MVVM_Basics.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -28,13 +30,28 @@ public class QueuePageViewModel : ViewModelBase
     }
 
 
-
     public QueuePageViewModel(IServiceProvider serviceProvider)
     {
         _ServiceProvider = serviceProvider;
         _SharedDataContext = serviceProvider.GetRequiredService<ISharedDataContext>();
-
         _CurrentPlayingSong = _SharedDataContext.CurrentPlayingSong;
-        
+        _SongQueue = _SharedDataContext.SongQueue;
+    }
+
+    private void HandleAddSongToQueueMessage(AddSongToQueueMessage message)
+    {
+        var songToAdd = message.Song;
+
+        if (!SongQueue.Contains(songToAdd) && songToAdd != null) 
+        {
+            SongQueue.Add(songToAdd);
+
+            // play the song if it is the first song to be added to the queue
+            if (SongQueue.Count == 1)
+            {
+                Messenger.Default.Send(new ChangeSongMessage(songToAdd));
+            }
+        }
+
     }
 }

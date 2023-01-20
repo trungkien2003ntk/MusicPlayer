@@ -14,8 +14,12 @@
              TextOptions.TextRenderingMode="Auto"
              Background="{DynamicResource MaterialDesignPaper}"
              FontFamily="{DynamicResource MainFont}"
+             xmlns:converter="clr-namespace:MVVM_Basics.Views.Converter"
              
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:SongToLikedSongTitleConverter x:Key="SongToLikedSongTitleConverter"/>
+    </UserControl.Resources>
     <materialDesign:Card
                 Width="auto"
                 Background="#121212"

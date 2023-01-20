@@ -108,11 +108,17 @@
                 </Button>
 
                 <!--Favourite songs-->
-                <Button Grid.Row="5" Style="{DynamicResource sideMenuButton}">
+                <Button Grid.Row="5" Style="{DynamicResource sideMenuButton}"
+                        Command="{Binding DataContext.DisplayLikedSongsPageCommand, 
+                                          RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                                          Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="HeartBox" Style="{DynamicResource sideMenuIcon}"/>
+                        <Border Width="30" Height="30" Margin="0 0 10 0" Background="{DynamicResource gradientLikedSongsIcon}" CornerRadius="5">
+                            <materialDesign:PackIcon Width="20" Kind="Heart" Margin="0" Padding="5" Background="Transparent" Foreground="White" Style="{DynamicResource sideMenuIcon}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            </materialDesign:PackIcon>
+                        </Border>
                         <Border Style="{DynamicResource sideMenuTitleBorder}">
-                            <TextBlock Text="Favourite Songs" Style="{DynamicResource sideMenuTitle}"/>
+                            <TextBlock Text="Liked Songs" Style="{DynamicResource sideMenuTitle}"/>
                         </Border>
                     </StackPanel>
                 </Button>

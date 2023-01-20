@@ -69,4 +69,6 @@ public partial class LibraryPage : UserControl
             parent.RaiseEvent(eventArg);
         }
     }
+
+    
 }
