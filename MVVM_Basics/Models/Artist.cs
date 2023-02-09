@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MVVM_Basics.Models;
-
-public partial class Artist
+namespace MVVM_Basics.Models
 {
-    public int Id { get; set; }
+    public partial class Artist
+    {
+        public Artist()
+        {
+            AlbumArtists = new HashSet<AlbumArtist>();
+            FollowingArtists = new HashSet<FollowingArtist>();
+            SongArtists = new HashSet<SongArtist>();
+        }
 
-    public string? Name { get; set; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
 
-    public virtual ICollection<AlbumArtist> AlbumArtists { get; } = new List<AlbumArtist>();
-
-    public virtual ICollection<FollowingArtist> FollowingArtists { get; } = new List<FollowingArtist>();
-
-    public virtual ICollection<SongArtist> SongArtists { get; } = new List<SongArtist>();
+        public virtual ICollection<AlbumArtist> AlbumArtists { get; set; }
+        public virtual ICollection<FollowingArtist> FollowingArtists { get; set; }
+        public virtual ICollection<SongArtist> SongArtists { get; set; }
+    }
 }
