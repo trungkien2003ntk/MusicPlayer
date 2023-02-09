@@ -11,52 +11,97 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             Background="#101010"
+             Background="{DynamicResource titleBarBackground}"
+             Opacity="0.8"
              FontFamily="{DynamicResource MainFont}"
              xmlns:viewmodels="clr-namespace:MVVM_Basics.ViewModels"
              
              mc:Ignorable="d"
-             Height="35" Width="140"
              x:Name="UCTitleBar"
-             d:DesignHeight="35" d:DesignWidth="140">
-
+             d:DesignHeight="40" d:DesignWidth="800">
     <Grid>
-        <materialDesign:ColorZone
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="132"/>
+        </Grid.ColumnDefinitions>
+
+
+        <!--<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Style="{DynamicResource trackControlBtnSkip}"
+                    Margin="0 0 0 0"
+                    Width="25"
+                    Height="25">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="15"/>
+                    </Style>
+                </Button.Resources>
+                <Button.Background>
+                    <SolidColorBrush Color="#0a0a0a" Opacity="0.7"/>
+                </Button.Background>
+
+                <materialDesign:PackIcon Kind="NavigateBefore" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Button>
+            
+            <Button Style="{DynamicResource trackControlBtnSkip}"
+                    Margin="6 0 0 0"
+                    Width="25"
+                    Height="25">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="15"/>
+                    </Style>
+                </Button.Resources>
+                <Button.Background>
+                    <SolidColorBrush Color="#0a0a0a" Opacity="0.7"/>
+                </Button.Background>
+
+                <materialDesign:PackIcon Kind="NavigateNext" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Button>
+        </StackPanel>-->
+        
+        <!--Three main button-->
+        <materialDesign:ColorZone Grid.Column="2"
             Mode="PrimaryLight"
             Background="#101010"
             Padding="0"
+            Opacity="0.8"
             CornerRadius="0 0 0 0">
-            <DockPanel Height="35">
+            <DockPanel Height="25">
                 <StackPanel DockPanel.Dock="Right"
                             HorizontalAlignment="Right"
                             Orientation="Horizontal">
                     <Button
+                        Height="25"
                         Style="{DynamicResource MaterialDesignFlatButton}"
                         Command="{Binding MinimizeWindowCommand}"
-                        CommandParameter="{Binding ElementName=UCTitleBar}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                         Foreground="White"
                         ToolTip="Minimize"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Content="{materialDesign:PackIcon Kind=Minus}" />
+                        Content="{materialDesign:PackIcon Kind=Minus,Size=12}" />
                     <Button
+                        Height="25"
                         Style="{DynamicResource MaterialDesignFlatButton}"
                         Command="{Binding MaximizeWindowCommand}"
-                        CommandParameter="{Binding ElementName=UCTitleBar}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                         Foreground="White"
                         ToolTip="Maximize"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Content="{materialDesign:PackIcon Kind=SquareRoundedOutline}" />
+                        Content="{materialDesign:PackIcon Kind=SquareRoundedOutline,Size=12}" />
                     <Button
+                        Height="25"
                         Style="{DynamicResource MaterialDesignFlatButton}"
                         Command="{Binding CloseWindowCommand}"
-                        CommandParameter="{Binding ElementName=UCTitleBar}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                         Foreground="White"
                         ToolTip="Close"
                         BorderBrush="Transparent"
                         Background="Transparent"
-                        Content="{materialDesign:PackIcon Kind=WindowClose}" />
+                        Content="{materialDesign:PackIcon Kind=WindowClose,Size=12}" />
                 </StackPanel>
             </DockPanel>
         </materialDesign:ColorZone>

@@ -13,10 +13,158 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
+             FontFamily="{DynamicResource MainFont}"
+             xmlns:converters="clr-namespace:MVVM_Basics.Views.Converter"
+             xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
              
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{DynamicResource gradientHomeBackground}">
-        <TextBlock Text="SearchPage" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+
+    <UserControl.Resources>
+        <converters:MyStringToVisibilityConverter x:Key="MyStringToVisibilityConverter"/>
+    </UserControl.Resources>
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientHomeBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="65"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
+
+            <!--Search box-->
+            <Border Grid.Row="1"
+                    BorderThickness="1" 
+                    Background="White" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    CornerRadius="10"
+                    Margin="20 10 0 0">
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <materialDesign:PackIcon Kind="Magnify"
+                                             Width="35" Height="35"
+                                             VerticalAlignment="Center"/>
+                    <Grid>
+                        <TextBox x:Name="txbSearch"
+                                 TextChanged="txbSearch_TextChanged">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Height" Value="50"/>
+                                    <Setter Property="Width" Value="400"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBlock Text="What do you want to listen to?"
+                                   Background="Transparent" 
+                                   Margin="5"
+                                   FontSize="15"
+                                   VerticalAlignment="Center"
+                                   Foreground="#757574"
+                                   Visibility="{Binding ElementName=txbSearch, Path=Text, Converter={StaticResource MyStringToVisibilityConverter}}" 
+                                   IsHitTestVisible="False">
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+                
+                <!--Result field-->
+                
+            </Border>
+
+            <Grid Grid.Row="2" Margin="5">
+                <TabControl Grid.Row="2" HorizontalAlignment="Left"
+                            Width="{Binding RelativeSource={RelativeSource AncestorType=Grid, Mode=FindAncestor}, Path=ActualWidth}"
+                            Style="{StaticResource MaterialDesignFilledTabControl}"
+                            materialDesign:ColorZoneAssist.Mode="Custom"
+                            materialDesign:ColorZoneAssist.Foreground="White"
+                            materialDesign:ColorZoneAssist.Background="#1ebb54">
+                    <TabItem Header="Songs">
+                        <ListView Style="{DynamicResource songListStyle}"
+                                  ItemsSource="{Binding FilteredSongs}"/>
+                    </TabItem>
+
+                    <TabItem Header="Playlists">
+                        <!--<ListView Style="{DynamicResource songListForWrapStyle}"
+                                  ItemsSource="{Binding FilteredPlaylists}"/>-->
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding FilteredPlaylists}" Style="{DynamicResource PlaylistGrid}">
+                                <!--<ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="150" CornerRadius="6" Height="200" Margin="0 20 20 0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.DisplayPlaylistPageCommand, 
+                                                                                             RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}, Mode=FindAncestor},
+                                                                                             Mode=OneWay}"
+                                                                           CommandParameter="{Binding}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{DynamicResource gradientCardBackground}"/>
+
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource gradientCardBackground.Hover}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=Border, Mode=FindAncestor}}"/>
+                                                    <RowDefinition Height="1*"/>
+                                                    <RowDefinition Height="1*"/>
+                                                </Grid.RowDefinitions>
+
+                                                --><!--Thumbnail--><!--
+                                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="{StaticResource DefaultPlaylistCoverImage}"/>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                                    </Border.Effect>
+                                                </Border>
+
+                                                --><!--Title--><!--
+                                                <TextBlock Text="{Binding Name}" Grid.Row="1"
+                                Style="{DynamicResource txblCardStyle}">
+                                                </TextBlock>
+
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>-->
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <TabItem Header="Artists">
+                        <ListView Style="{DynamicResource songListStyle}"
+                                  ItemsSource="{Binding FilteredSongsByArtist}"/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </materialDesign:Card>
 </UserControl>

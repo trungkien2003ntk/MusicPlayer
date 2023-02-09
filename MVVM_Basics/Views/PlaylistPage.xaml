@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Basics.Views"
              
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -14,94 +15,122 @@
              FontFamily="{DynamicResource MainFont}"
              xmlns:viewmodel="clr-namespace:MVVM_Basics.ViewModels"
              
+             xmlns:attprop="clr-namespace:MVVM_Basics.Views.AttachedProperties"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="800">
-    <ScrollViewer CanContentScroll="True">
-        <ScrollViewer.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#debf81" Offset="0.1" />
-                <GradientStop Color="#debf81" Offset="0.2" />
-
-                <GradientStop Color="#101010" Offset="0.8" />
-                <GradientStop Color="#121212" Offset="1.0" />
-            </LinearGradientBrush>
-        </ScrollViewer.Background>
-        
-        <Grid Margin="0 30 0 0">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="MySortedList" Source="{Binding PlaylistSongs}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName=""/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+    
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientPlaylistBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
 
-                <Image Margin="40" materialDesign:ElevationAssist.Elevation="Dp12"
-                       Source="/Images/DefaultPlaylistCoverImage.jpeg"/>
+            <ScrollViewer Grid.Row="1" CanContentScroll="True">
+                <Grid Margin="0 30 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <StackPanel Grid.Column="1" 
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Margin="20" materialDesign:ElevationAssist.Elevation="Dp12"
+                               Source="/Images/DefaultPlaylistCoverImage.jpeg"/>
+
+                        <StackPanel Grid.Column="1" 
                             Orientation="Vertical" 
                             VerticalAlignment="Bottom"
                             Margin="0 0 0 20">
-                    <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
-                               VerticalAlignment="Bottom"
-                               Text="PUBLIC PLAYLIST"/>
-                    <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
-                               Text="{Binding CurrentPlaylist.Name}"
-                               FontSize="60"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TotalSongs, StringFormat={}{0} songs\,}"
-                                   Style="{DynamicResource txblPlaylistInfoStyle}"
-                                   Foreground="White"/>
-                        <TextBlock Text="{Binding TotalDuration}" 
-                                   Style="{DynamicResource txblPlaylistInfoStyle}"
-                                   Foreground="LightGray"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-            
-            
-            
-            <DockPanel Grid.Row="1">
-                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" 
-                        DockPanel.Dock="Left"
-                        Margin="40 0 0 0"
-                        HorizontalAlignment="Left"
-                        Background="#1ed760"
-                        Foreground="Black"
-                        BorderBrush="Transparent"
-                        Width="60" Height="60"
-                        
-                        Content="{materialDesign:PackIcon Kind=Play,Size=40}"/>
+                            <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
+                                       VerticalAlignment="Bottom"
+                                       Text="PUBLIC PLAYLIST"
+                                       Margin="5 10 0 0"/>
+                            <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
+                                       Text="{Binding CurrentPlaylist.Name}"
+                                       FontSize="80"
+                                       Margin="5 0 0 0"
+                                       d:Text="My Playlist"/>
+                            <StackPanel Orientation="Horizontal" Margin="5 5 0 0">
+                                <TextBlock Text="{Binding TotalSongs, StringFormat={}{0} songs\,}"
+                                           Style="{DynamicResource txblPlaylistInfoStyle}"
+                                           Foreground="White"
+                                           d:Text="0 songs,"/>
+                                <TextBlock Text="{Binding TotalDuration}"
+                                           Style="{DynamicResource txblPlaylistInfoStyle}"
+                                           Foreground="LightGray"
+                                           d:Text="0hr 0min"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
 
-                <ToggleButton ToolTip="Save to Library"
-                              Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
-                              Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
-                              Background="#1ed55f"
-                              Margin="20 0 0 0"
-                              Foreground="#f9f9f9"
-                              IsChecked="True"/>
+                    <DockPanel Grid.Row="1">
+                        <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" 
+                                DockPanel.Dock="Left"
+                                Margin="40 0 0 0"
+                                HorizontalAlignment="Left"
+                                Background="#1ed760"
+                                Foreground="Black"
+                                BorderBrush="Transparent"
+                                Width="60" Height="60"
+                                Content="{materialDesign:PackIcon Kind=Play,Size=40}"
+                                Command="{Binding AddAllPlaylistSongsToQueue}"
+                                CommandParameter="{Binding CurrentPlaylist}"/>
 
-                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
-                        Content="{materialDesign:PackIcon Kind=DownloadCircleOutline,Size=40}"
-                        Background="Transparent" BorderBrush="Transparent"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Left"
-                        Margin="15 0 0 0"
-                        Foreground="White"/>
+                        <!--<ToggleButton ToolTip="Save to Library"
+                                      Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
+                                      Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
+                                      Background="#1ed55f"
+                                      Margin="20 0 0 0"
+                                      Foreground="#f9f9f9"
+                                      IsChecked="True"/>-->
 
-            </DockPanel>
+                        <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
+                                Content="{materialDesign:PackIcon Kind=DotsHorizontal,Size=40}"
+                                Background="Transparent" BorderBrush="Transparent"
+                                HorizontalAlignment="Left"
+                                DockPanel.Dock="Left"
+                                Margin="15 0 0 0"
+                                Foreground="White"
+                                ContextMenuService.IsEnabled="False"
+                                ContextMenuService.Placement="Absolute"
+                                ContextMenuService.PlacementTarget="{Binding RelativeSource={RelativeSource Self}}"
+                                ContextMenu="{DynamicResource ContextMenuPlaylist}"
+                                attprop:ContextMenuLeftClickBehavior.IsLeftClickEnabled="True"/>
+                    </DockPanel>
 
-            <ListView Grid.Row="2" Style="{DynamicResource songListStyle}"
-                      ItemsSource="{Binding CurrentPlaylist}">
-                
-            </ListView>
+                    <ListView x:Name="lvSongs" Grid.Row="2" Style="{DynamicResource songListStyle}"
+                              ContextMenu="{DynamicResource ContextMenuSongForPlaylistPage}"
+                              ItemsSource="{Binding PlaylistSongs}"
+                              PreviewKeyDown="ListView_PreviewKeyDown"
+                              Loaded="ListView_Loaded">
+                    </ListView>
+                </Grid>
+
+
+            </ScrollViewer>
+
         </Grid>
-        
-        
-    </ScrollViewer>
+    </materialDesign:Card>
 </UserControl>

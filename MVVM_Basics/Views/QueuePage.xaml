@@ -15,41 +15,80 @@
              
              mc:Ignorable="d"
              d:DesignHeight="610" d:DesignWidth="800">
-    <ScrollViewer CanContentScroll="True"
-                  Background="#121212">
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientHomeBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Grid Margin="20 30 0 0">
-            <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Queue"/>
-            <!--Now playing txbl-->
-            <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Now playing" Margin="0 70 0 0" FontSize="17" Foreground="#a7a7a7" />
-            
-            <!--Now playing song-->
-            <DockPanel Margin="4" Name="BackgroundBorder">
-                <!--Cover image-->
-                <Image Source="{Binding Path=CurrentPlayingSong,Converter={StaticResource SongToSongCoverImageConverter}}" Width="40" Height="40" DockPanel.Dock="Left" Margin="20 10 0 10"/>
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
 
-                <Grid Margin="20 0 0 0">
-                    <!--Song Name-->
-                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongTitleCoverter}}" Foreground="White" Margin="0 10 0 5" VerticalAlignment="Top"/>
+            <ScrollViewer x:Name="scrollViewerMain" Grid.Row="1" CanContentScroll="True">
+                <Grid Margin="20 30 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                    <!--Artist-->
-                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongArtistConverter}}" Foreground="LightGray" Margin="0 10 0 7" VerticalAlignment="Bottom"/>
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Queue"/>
+                        <!--Now playing txbl-->
+                        <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Now playing" FontSize="17" Margin="0" Foreground="#a7a7a7" />
+
+                        <!--Now playing song-->
+                        <ListViewItem Grid.Row="0">
+                            <DockPanel Margin="4" Name="BackgroundBorder" Width="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem, Mode=FindAncestor}, Path=ActualWidth}">
+                                <DockPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontSize" Value="15"/>
+                                        <Setter Property="FontFamily" Value="{StaticResource CircularBook}"/>
+                                    </Style>
+                                </DockPanel.Resources>
+                                <!--Cover image-->
+                                <Image Source="{Binding Path=CurrentPlayingSong,Converter={StaticResource SongToSongCoverImageConverter}}" Width="40" Height="40" DockPanel.Dock="Left" Margin="0 10 0 10"
+                                               d:Source="/Images/DefaultPlaylistCoverImage.jpeg"/>
+
+                                <Grid Margin="20 0 0 0">
+                                    <!--Song Name-->
+                                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongTitleCoverter}}" Foreground="#1bc257" Margin="0 10 0 5" VerticalAlignment="Top"
+                                                       d:Text="Design Song Name"/>
+
+                                    <!--Artist-->
+                                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongArtistConverter}}" Foreground="LightGray" Margin="0 10 0 7" VerticalAlignment="Bottom"
+                                                       d:Text="Design Song Artist"/>
+                                </Grid>
+
+                                <Grid DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0">
+                                    <!--Duration-->
+                                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongDurationCoverter},StringFormat='{}{0:mm\\:ss}'}" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Medium" Foreground="Gray" Margin="0 0 20 0"
+                                               d:Text="00:00"/>
+                                </Grid>
+                            </DockPanel>
+                        </ListViewItem>
+                    </StackPanel>
+
+                    <StackPanel MouseDown="ListView_MouseDown" Grid.Row="1">
+                        <!--Now playing txbl-->
+                        <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Next up" FontSize="17" Margin="0" Foreground="#a7a7a7" />
+
+                        <!--Next up list-->
+                        <ListView x:Name="lvNextUp" Style="{StaticResource songListStyle}"
+                                  ItemsSource="{Binding SongQueue}"
+                                  MouseDown="ListView_MouseDown"
+                                  ContextMenu="{DynamicResource ContextMenuSongForQueuePage}">
+
+                        </ListView>
+                    </StackPanel>
                 </Grid>
 
-                <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0">
-                    <!--Duration-->
-                    <TextBlock Text="{Binding Path=CurrentPlayingSong, Converter={StaticResource SongToSongDurationCoverter},StringFormat='{}{0:mm\\:ss}'}" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Medium" Foreground="Gray" Margin="10"/>
-                </Grid>
-            </DockPanel>
+            </ScrollViewer>
             
-            <!--Next up list-->
-            <ListView Style="{StaticResource songListStyle}" ItemsSource="{Binding}">
-                
-            </ListView>
         </Grid>
-
-        
-
-
-    </ScrollViewer>
+    </materialDesign:Card>
 </UserControl>

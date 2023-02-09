@@ -17,7 +17,7 @@
              FontFamily="{DynamicResource MainFont}"
              
              xmlns:dviewmodels="clr-namespace:MVVM_Basics.ViewModels"
-             
+             xmlns:attprop="clr-namespace:MVVM_Basics.Views.AttachedProperties"
              mc:Ignorable="d" 
              Width="250"
              d:DesignHeight="583" d:DesignWidth="250">
@@ -41,13 +41,62 @@
                 <!--Three dot menu-->
 
                 <Button Grid.Row="0"
-                              BorderThickness="0"
-                              Width="40" HorizontalAlignment="Left"
-                              Content="..."
-                              Padding="0"
-                              FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
-                              Foreground="White"
-                              Background="Transparent"/>
+                        BorderThickness="0"
+                        Width="40" HorizontalAlignment="Left"
+                        Content="..."
+                        Padding="0"
+                        FontSize="30" FontWeight="Bold" FontFamily="Arial Rounded MT Bold"
+                        Foreground="White"
+                        Background="Transparent"
+                        Template="{DynamicResource ButtonTemplate1}"
+                        ContextMenuService.IsEnabled="False"
+                        ContextMenuService.Placement="Right"
+                        attprop:ContextMenuLeftClickBehavior.IsLeftClickEnabled="True">
+                    <Button.ContextMenu>
+                        <ContextMenu ItemsPanel="{DynamicResource MenuItemPanelTemplate}"
+                                     Background="{StaticResource ContextMenuNormalBackground}"
+                                     Foreground="White"
+                                     Margin="0"
+                                     BorderThickness="0">
+                            <ContextMenu.Resources>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}, Path=Background}"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource ContextMenuHoverBackground}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+
+                                <Style TargetType="{x:Type Separator}">
+                                    <Setter Property="Background" Value="#525252"/>
+                                    <Setter Property="Margin" Value="0,2,0,2"/>
+                                    <Setter Property="Focusable" Value="false"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Separator}">
+                                                <Border 
+                                                    BorderBrush="Blue" 
+                                                    BorderThickness="2"
+                                                    Background="#525252" 
+                                                    Height="1" 
+                                                    SnapsToDevicePixels="true"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ContextMenu.Resources>
+
+                            <MenuItem Header="Exit" 
+                                      Command="{Binding CloseWindowCommand}"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
                 
                 <!--Home-->
                 <Button Grid.Row="1"
@@ -134,8 +183,6 @@
                           x:Name="playlistList"
                           Style="{DynamicResource playlistListStyle}"
                           ItemsSource="{Binding Playlists, Mode=OneWay}">
-                    
-
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Background" Value="Transparent" />
@@ -167,7 +214,7 @@
                                         Height="20"
                                         Background="Transparent"
                                         Command="{Binding DataContext.DisplayPlaylistPageCommand, 
-                                                          RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}}, 
+                                                          RelativeSource= {RelativeSource AncestorType={x:Type local:MainWindow}, Mode=FindAncestor},
                                                                                           Mode=OneWay}"
                                         CommandParameter="{Binding}"
                                         >

@@ -14,6 +14,7 @@
              
              Background="#181818"
              
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
              xmlns:custom_converters="clr-namespace:MVVM_Basics.Views.Converter"
@@ -32,10 +33,11 @@
         <custom_converters:TimeSpanToDoubleConverter x:Key="TimeSpanToDoubleConverter"/>
         <custom_converters:DoubleToTimeSpanConverter x:Key="DoubleToTimeSpanConverter"/>
         <custom_converters:SongToSongDurationDoubleCoverter x:Key="SongToSongDurationDoubleCoverter"/>
+        <custom_converters:SongToIsLikedConverter x:Key="SongToIsLikedConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.9*"/>
+            <ColumnDefinition Width="0.9*" MinWidth="350" />
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="0.8*"/>
         </Grid.ColumnDefinitions>
@@ -54,22 +56,28 @@
 
                 <!--Title-->
                 <TextBlock Grid.Row="0"
-                       Style="{DynamicResource currentPlayingSongTitle}"
-                       ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}"
-                       Text="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongTitleConverter}}"/>
+                           Style="{DynamicResource currentPlayingSongTitle}"
+                           HorizontalAlignment="Left"
+                           ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}"
+                           Text="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongTitleConverter}}"
+                           d:Text="This is design text and its so longgggg"/>
                 
                 <!--Artist-->
                 <TextBlock Grid.Row="1" 
-                       Style="{DynamicResource currentPlayingSongArtist}"
-                       Text ="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongArtistConverter}}"/>
+                           Style="{DynamicResource currentPlayingSongArtist}"
+                           HorizontalAlignment="Left"
+                           Text ="{Binding CurrentPlayingSong, Converter={StaticResource SongToSongArtistConverter}}"
+                           d:Text="This is design text and its so longgggg"/>
             </Grid>
             <ToggleButton Margin="15"
-                      ToolTip="Save to Library"
-                      Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
-                      Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
-                      Background="#1ed55f"
-                      Foreground="#f9f9f9"
-                      IsChecked="False"/>
+                          ToolTip="Save to Library"
+                          Content="{materialDesign:PackIcon Kind=Heart, Size=21}"
+                          Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
+                          Background="#1ed55f"
+                          Foreground="#f9f9f9"
+                          Command="{Binding ToggleLikedSongCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                          IsChecked="{Binding CurrentPlayingSong, Converter={StaticResource SongToIsLikedConverter}}"/>
         </StackPanel>
 
         <!--MediaElement and control center-->
@@ -83,7 +91,13 @@
             <MediaElement x:Name="mediaPlayer" Volume="1" 
                           Source="{Binding CurrentPlayingSong,Converter={StaticResource SongToSongPcPathCoverter}}"
                           
-                          LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+                          LoadedBehavior="Manual" UnloadedBehavior="Manual">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MediaEnded">
+                        <i:InvokeCommandAction Command="{Binding SkipNextCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MediaElement>
 
             <Grid Name="ControllerGrid" Grid.Row="1" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>

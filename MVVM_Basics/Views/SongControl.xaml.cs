@@ -7,15 +7,24 @@ using MVVM_Basics.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using MVVM_Basics.ViewModels;
 using System.Windows.Threading;
+using System.Transactions;
+using GalaSoft.MvvmLight.Messaging;
+using MVVM_Basics.Helpers;
 
 namespace MVVM_Basics.Views;
 
 public partial class SongControl : UserControl
 {
-    ISoundPlayer? _SoundPlayer;
-    double _SavedSliderVolumeValue;
-    DispatcherTimer timer;
-    string _TimeFormat = @"mm\:ss";
+    private const int MINIMUM_PLAY_DURATION = 30;
+    private const int SAVE_DATE_PLAY_THRESHOLD = 3;
+    private readonly DispatcherTimer timer;
+    private readonly string _TimeFormat = @"mm\:ss";
+
+
+    private double secondsPlayed;
+    private double _SavedSliderVolumeValue;
+    private ISoundPlayer? _SoundPlayer;
+    private bool playCounted = false;
 
     public SongControl()
     {
@@ -44,6 +53,21 @@ public partial class SongControl : UserControl
         if (mediaPlayer.Source != null)
         {
             sliderTime.Value += 1;
+            secondsPlayed += 1;
+        }
+
+        // save the song as played
+        if (secondsPlayed == SAVE_DATE_PLAY_THRESHOLD)
+        {
+            Messenger.Default.Send(new SaveSongPlayDateMessage());
+        }
+
+        // increase the play of the song
+        if (secondsPlayed >= MINIMUM_PLAY_DURATION && !playCounted)
+        {
+            Messenger.Default.Send(new IncreasePlayCountMessage());
+
+            playCounted = true;
         }
     }
 
@@ -72,6 +96,11 @@ public partial class SongControl : UserControl
             mediaPlayer.Source = new Uri(songPath);
             mediaPlayer.Position = TimeSpan.Zero;
             sliderTime.Value = 0;
+
+            // reset play counter
+            secondsPlayed = 0;
+            playCounted = false;
+
             OnPlay();
         }
     }
@@ -79,7 +108,11 @@ public partial class SongControl : UserControl
     void OnUnloaded(object sender, RoutedEventArgs e)
     {
         if (_SoundPlayer != null)
+        {
             _SoundPlayer.Play -= OnPlay;
+            secondsPlayed = 0;
+            playCounted = false;
+        }
     }
 
     private void OnPlay()
