@@ -10,6 +10,9 @@
     <Compile Update="Views\LikedSongsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MessageAndNotification\CustomMessageBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\TitleBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -58,6 +61,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ResourcesXAML\TrackControlResource.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MessageAndNotification\CustomizeToast.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MessageAndNotification\CustomMessageBox.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TitleBar.xaml">

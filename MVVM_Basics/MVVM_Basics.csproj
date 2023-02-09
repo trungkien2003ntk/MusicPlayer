@@ -18,6 +18,8 @@
     <None Remove="Fonts\CircularStd-Light.otf" />
     <None Remove="Fonts\CircularStd-Medium.otf" />
     <None Remove="Fonts\CircularStd-MediumItalic.otf" />
+    <None Remove="Fonts\SVN-Product Sans Bold.otf" />
+    <None Remove="Fonts\SVN-Product Sans Regular.otf" />
     <None Remove="Images\DefaultPlaylistCoverImage.jpeg" />
     <None Remove="Images\DefaultSongCover.png" />
   </ItemGroup>
@@ -67,6 +69,12 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\CircularStd-MediumItalic.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\SVN-Product Sans Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\SVN-Product Sans Regular.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\DefaultPlaylistCoverImage.jpeg" />

@@ -121,3 +121,7 @@ C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\bin\Debug\net6.0-windows\run
 C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\LikedSongsPage.g.cs
 C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\LikedSongsPage.baml
 C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\ResourcesXAML\PlaylistResource.g.cs
+C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\MessageAndNotification\CustomMessageBox.g.cs
+C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\MessageAndNotification\CustomMessageBox.baml
+C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\MessageAndNotification\CustomizeToast.g.cs
+C:\Users\ADMIN\source\repos\MVVM_Basics\MVVM_Basics\obj\Debug\net6.0-windows\Views\MessageAndNotification\CustomizeToast.baml
