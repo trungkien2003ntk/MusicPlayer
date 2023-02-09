@@ -8,6 +8,7 @@ using MVVM_Basics.Views;
 using System.Reflection;
 using System;
 using System.Windows;
+using MVVM_Basics.Services;
 
 namespace MVVM_Basics;
 
@@ -23,13 +24,14 @@ public partial class App : Application
             {
                 services.AddTransient<MusicPlayerVpContext>();
                 services.AddSingleton<ISharedDataContext, SharedDataContext>();
+                services.AddTransient<IPlaylistManager, PlaylistManager>();
 
+                services.AddSingleton<MainWindowViewModel>();
                 services.AddTransient<SideBarViewModel>();
-                services.AddTransient<MainWindowViewModel>();
                 services.AddTransient<HomePageViewModel>();
                 services.AddTransient<SearchPageViewModel>();
                 services.AddTransient<LibraryPageViewModel>();
-                services.AddTransient<PlaylistPageViewModel>();
+                services.AddSingleton<PlaylistPageViewModel>();
                 services.AddTransient<LikedSongsPageViewModel>();
                 services.AddTransient<SongControlViewModel>();
                 services.AddTransient<TitleBarViewModel>();
