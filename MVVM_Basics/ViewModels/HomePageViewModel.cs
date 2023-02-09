@@ -30,10 +30,12 @@ public class HomePageViewModel : ViewModelBase
     {
         _ServiceProvider = serviceProvider;
 
+
         using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
         {
             _RecentlyPlayedSongs = new(
                 context.Songs
+                    .Where(s => s.LastestPlayDate != null)
                     .OrderBy(s => s.LastestPlayDate)
                     .ThenBy(s => s.Id)
                     .Take(MAX_SONGS_ON_COLLAPSED)

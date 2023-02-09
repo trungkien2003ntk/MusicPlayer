@@ -69,7 +69,12 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
 
     private void OnSaveSongPlayDateMessageReceived(SaveSongPlayDateMessage message)
     {
-        CurrentPlayingSong!.LastestPlayDate = DateTime.Now;
+        using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+        {
+            CurrentPlayingSong!.LastestPlayDate = DateTime.Now;
+            context.Songs.FirstOrDefault(s => s.Id == CurrentPlayingSong.Id)!.LastestPlayDate = CurrentPlayingSong!.LastestPlayDate;
+            context.SaveChanges();
+        }
     }
 
     private void OnIncreasePlayCountMessageReceived(IncreasePlayCountMessage message)

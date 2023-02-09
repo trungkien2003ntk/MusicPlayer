@@ -76,7 +76,7 @@ namespace MVVM_Basics.ViewModels
             using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
             {
                 LoginedUserId = context.Users.Where(x => x.Name == "admin").FirstOrDefault()!.Id;
-                CurrentPlayingSong = context.Songs.First();
+                CurrentPlayingSong = context.Songs.FirstOrDefault();
             }
 
             CurrentOpeningPlaylist = null;

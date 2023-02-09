@@ -38,10 +38,16 @@
                 <Grid Margin="20 0 0 0">
                     <StackPanel VerticalAlignment="Top">
                         <!--#1 title-->
-                        <StackPanel Orientation="Horizontal">
+                        <Grid>
                             <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Songs"/>
-                            <Button x:Name="btnImportSong" Margin="30 0 0 0" Content="Import Song" Click="btnImportSong_Click"/>
-                        </StackPanel>
+                            <Button x:Name="btnImportSong" Margin="0 0 20 0" Content="Import Song" Click="btnImportSong_Click"
+                                    Template="{StaticResource ButtonTemplate1}"
+                                    FontFamily="{DynamicResource CircularBlack}"
+                                    HorizontalAlignment="Right"
+                                    BorderBrush="Transparent"
+                                    Background="#a7a7a7"
+                                    FontSize="20"/>
+                        </Grid>
 
                         <!--#1 List-->
                         <ListView Grid.Row="2" 

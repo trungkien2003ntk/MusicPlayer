@@ -54,9 +54,15 @@ public class SideBarViewModel : ViewModelBase
                         (p) => { return true; },
                         (p) =>
                         {
+                            int totalPlaylists;
+                            using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+                            {
+                                totalPlaylists = context.Playlists.Count();
+                            }
+
                             Playlist addingPlaylist = new Playlist()
                             {
-                                Name = "My playlist",
+                                Name = $"My playlist #{totalPlaylists + 1}",
                                 CreatedDate = DateTime.Now,
                                 Description = "",
                                 UsersId = LoginedUserId,
@@ -67,6 +73,7 @@ public class SideBarViewModel : ViewModelBase
                             using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
                             {
                                 context.Playlists.Add(addingPlaylist);
+                                context.SaveChanges();
                             }
                         }
                     );

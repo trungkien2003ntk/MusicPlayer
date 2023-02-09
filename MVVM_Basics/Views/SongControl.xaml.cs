@@ -25,6 +25,7 @@ public partial class SongControl : UserControl
     private double _SavedSliderVolumeValue;
     private ISoundPlayer? _SoundPlayer;
     private bool playCounted = false;
+    private bool isPlayDateSaved = false;
 
     public SongControl()
     {
@@ -57,9 +58,10 @@ public partial class SongControl : UserControl
         }
 
         // save the song as played
-        if (secondsPlayed == SAVE_DATE_PLAY_THRESHOLD)
+        if (secondsPlayed >= SAVE_DATE_PLAY_THRESHOLD && !isPlayDateSaved)
         {
             Messenger.Default.Send(new SaveSongPlayDateMessage());
+            isPlayDateSaved = true;
         }
 
         // increase the play of the song
@@ -100,6 +102,7 @@ public partial class SongControl : UserControl
             // reset play counter
             secondsPlayed = 0;
             playCounted = false;
+            isPlayDateSaved = false;
 
             OnPlay();
         }
