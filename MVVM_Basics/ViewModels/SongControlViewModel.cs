@@ -6,6 +6,7 @@ using MVVM_Basics.Interfaces;
 using MVVM_Basics.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels;
@@ -18,15 +19,15 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
 
     public ICommand? SkipNextCommand { get; set; }
 
-    private Song _CurrentPlayingSong;
-    public Song CurrentPlayingSong
+    private Song? _CurrentPlayingSong;
+    public Song? CurrentPlayingSong
     {
         get { return _CurrentPlayingSong; }
         set { _CurrentPlayingSong = value; _SharedDataContext.CurrentPlayingSong = value; OnPropertyChanged(); }
     }
 
 
-    private bool _IsPlaying;
+    private bool _IsPlaying = false;
     public bool IsPlaying
     {
         get { return _IsPlaying; }
@@ -55,37 +56,36 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
         _ServiceProvider = serviceProvider;
         _SharedDataContext = serviceProvider.GetRequiredService<ISharedDataContext>();
 
-        _IsPlaying = false;
-
-        _CurrentPlayingSong = new Song();
-
         if (HasASongLoaded())
         {
             _CurrentPlayingSong = _SharedDataContext.CurrentPlayingSong!;
         }
 
         Messenger.Default.Register<ChangeSongMessage>(this, OnChangeSongMessageReceived);
-
+        Messenger.Default.Register<IncreasePlayCountMessage>(this, OnIncreasePlayCountMessageReceived);
+        Messenger.Default.Register<SaveSongPlayDateMessage>(this, OnSaveSongPlayDateMessageReceived);
         InitializeCommands();
     }
 
-    private void InitializeCommands()
+    private void OnSaveSongPlayDateMessageReceived(SaveSongPlayDateMessage message)
     {
-        SkipNextCommand = new RelayCommand<Song>(
-            (p) => { if (_SharedDataContext.SongQueue.Count > 0) return true; return false; },
-            (p) =>
-            {
-                var nextSong = _SharedDataContext.SongQueue[0];
-
-                SkipSong(nextSong);
-
-                _SharedDataContext.SongQueue.RemoveAt(0);
-            });
+        CurrentPlayingSong!.LastestPlayDate = DateTime.Now;
     }
 
-    private bool HasASongLoaded()
+    private void OnIncreasePlayCountMessageReceived(IncreasePlayCountMessage message)
     {
-        return _SharedDataContext.CurrentPlayingSong != null;
+        CurrentPlayingSong!.Plays += 1;
+
+        using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+        {
+            Song? currentSongInDB = context.Songs.FirstOrDefault(s => s.Id == CurrentPlayingSong.Id);
+
+            if (currentSongInDB != null)
+            {
+                currentSongInDB.Plays += 1;
+                context.SaveChanges();
+            }
+        }
     }
 
     private void OnChangeSongMessageReceived(ChangeSongMessage message)
@@ -98,27 +98,89 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
         }
         else
         {
-            // Show message song not available
+            // Show noti song not available
         }
     }
 
+    private void InitializeCommands()
+    {
+        SkipNextCommand = new RelayCommand<Song>(
+            (p) => { if (_SharedDataContext.SongQueue.Count > 0) return true; return false; },
+            (p) =>
+            {
+                if (_SharedDataContext.SongQueue.Count <= 0)
+                    return;
+
+                var nextSong = _SharedDataContext.SongQueue[0];
+                _SharedDataContext.CurrentPlayingSong = nextSong;
+
+                Messenger.Default.Unregister<ChangeSongMessage>(this, OnChangeSongMessageReceived);
+                Messenger.Default.Send(new ChangeSongMessage(nextSong));
+                Messenger.Default.Register<ChangeSongMessage>(this, OnChangeSongMessageReceived);
+
+                SkipSong(nextSong);
+
+                _SharedDataContext.SongQueue.RemoveAt(0);
+            });
+
+        ToggleLikedSongCommand = new RelayCommand<bool> (
+            (isLiked) => { return true; },
+            (isLiked) => 
+            {
+                if (!isLiked)
+                {
+                    using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+                    {
+                        LikedSong likedSong = new LikedSong()
+                        {
+                            UsersId = _SharedDataContext.LoginedUserId,
+                            SongId = CurrentPlayingSong.Id
+                        };
+
+                        context.LikedSongs.Remove(likedSong);
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+                    {
+                        LikedSong likedSong = new LikedSong()
+                        {
+                            UsersId = _SharedDataContext.LoginedUserId,
+                            SongId = CurrentPlayingSong.Id
+                        };
+
+                        context.LikedSongs.Add(likedSong);
+                        context.SaveChanges();
+                    }
+                }
+            });
+    }
+
+    private bool HasASongLoaded()
+    {
+        return _SharedDataContext.CurrentPlayingSong != null;
+    }
+
+    
+
     private void SkipSong(Song songToPlay)
     {
-        if (File.Exists(songToPlay.PcLink))
-        {
-            if (songToPlay.Id != CurrentPlayingSong.Id)
+        if (songToPlay != null)
+            if (File.Exists(songToPlay.PcLink))
             {
-                CurrentPlayingSong = songToPlay;
+                if (songToPlay.Id != CurrentPlayingSong?.Id)
+                {
+                    CurrentPlayingSong = songToPlay;
+                }
+
+                OnSongChanged?.Invoke(CurrentPlayingSong.PcLink!);
+                IsPlaying = true;
             }
-
-            OnSongChanged?.Invoke(CurrentPlayingSong.PcLink!);
-            IsPlaying = true;
-        }
-        else
-        {
-            // Download song from blob storage
-        }
-
-        
+            else
+            {
+                // Download song from blob storage
+            }
     }
 }

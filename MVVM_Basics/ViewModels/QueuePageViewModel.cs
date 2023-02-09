@@ -36,6 +36,23 @@ public class QueuePageViewModel : ViewModelBase
         _SharedDataContext = serviceProvider.GetRequiredService<ISharedDataContext>();
         _CurrentPlayingSong = _SharedDataContext.CurrentPlayingSong;
         _SongQueue = _SharedDataContext.SongQueue;
+
+
+        Messenger.Default.Register<ChangeSongMessage>(this, OnChangeSongMessageReceived);
+    }
+
+    private void OnChangeSongMessageReceived(ChangeSongMessage message)
+    {
+        var songToChange = message.Song;
+
+        if (songToChange != null)
+        {
+            CurrentPlayingSong = songToChange;
+        }
+        else
+        {
+            // Show noti Song not avaiable
+        }
     }
 
     private void HandleAddSongToQueueMessage(AddSongToQueueMessage message)

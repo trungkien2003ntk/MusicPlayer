@@ -4,6 +4,9 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using MVVM_Basics.EventAndCommandHandlers;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
+using GalaSoft.MvvmLight.Messaging;
+using MVVM_Basics.Helpers;
 
 namespace MVVM_Basics.ViewModels;
 
@@ -30,16 +33,21 @@ public class MainWindowViewModel : ViewModelBase
     }
 
 
+    private Visibility _ContentControlVisibility;
+
+    public Visibility ContentControlVisibility
+    {
+        get { return _ContentControlVisibility; }
+        set { _ContentControlVisibility = value; OnPropertyChanged(); }
+    }
+
+
+
     private ViewModelBase _CurrentViewModel;
     public ViewModelBase CurrentViewModel
     {
         get { return _CurrentViewModel; }
         set { _CurrentViewModel = value; OnPropertyChanged(); }
-    }
-
-    public MainWindowViewModel()
-    {
-
     }
 
     public MainWindowViewModel(IServiceProvider serviceProvider)
@@ -63,6 +71,8 @@ public class MainWindowViewModel : ViewModelBase
                     CurrentViewModel.Cleanup();
                     CurrentViewModel = _ServiceProvider.GetRequiredService<HomePageViewModel>();
                     CurrentPageType = PageType.HomePage;
+
+                    ContentControlVisibility = Visibility.Visible;
                 }
             }
         );
@@ -77,6 +87,8 @@ public class MainWindowViewModel : ViewModelBase
                    CurrentViewModel.Cleanup();
                    CurrentViewModel = _ServiceProvider.GetRequiredService<SearchPageViewModel>();
                    CurrentPageType = PageType.SearchPage;
+                   
+                   ContentControlVisibility = Visibility.Visible;
                }
            }
         );
@@ -86,12 +98,13 @@ public class MainWindowViewModel : ViewModelBase
            (p) => { return true; },
            (p) =>
            {
-               if (CurrentPageType != PageType.PlaylistPage || p.Id != ((PlaylistPageViewModel)CurrentViewModel).CurrentPlaylist?.Id)
+               if (CurrentPageType != PageType.PlaylistPage || p.Id != ((PlaylistPageViewModel)CurrentViewModel)?.CurrentPlaylist?.Id)
                {
-                   CurrentViewModel.Cleanup();
                    _SharedDataContext.CurrentOpeningPlaylist = p;
                    CurrentViewModel = _ServiceProvider.GetRequiredService<PlaylistPageViewModel>();
+                   ((PlaylistPageViewModel)CurrentViewModel).UpdateData(p);
                    CurrentPageType = PageType.PlaylistPage;
+                   Messenger.Default.Send(new PlaylistChangedMessage((PlaylistPageViewModel)CurrentViewModel));
                }
            }
         );

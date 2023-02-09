@@ -6,15 +6,18 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using MVVM_Basics.EventAndCommandHandlers;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace MVVM_Basics.ViewModels;
 
 public class SideBarViewModel : ViewModelBase
 {
+    public ICommand? CloseWindowCommand { get; set; }
     public ICommand? CreatePlaylistCommand { get; set; }
 
 
     private readonly IServiceProvider _ServiceProvider;
+    private readonly ISharedDataContext _SharedDataContext;
 
 
     private int? _LoginedUserId;
@@ -32,33 +35,17 @@ public class SideBarViewModel : ViewModelBase
         set { _Playlists = value; OnPropertyChanged(); }
     }
 
-    //public SideBarViewModel()
-    //{
-
-    //}
 
     public SideBarViewModel(IServiceProvider serviceProvider)
     {
         _ServiceProvider = serviceProvider;
+        _SharedDataContext = _ServiceProvider.GetRequiredService<ISharedDataContext>();
+        _LoginedUserId = _SharedDataContext.LoginedUserId;
+        _Playlists = _SharedDataContext.AllPlaylists;
 
-        LoginedUserId = _ServiceProvider.GetRequiredService<ISharedDataContext>().LoginedUserId;
-        _Playlists = _ServiceProvider.GetRequiredService<ISharedDataContext>().AllPlaylists;
-
-        //PopulateCollection();
         InitializeCommands();
     }
 
-    
-
-    //private void PopulateCollection()
-    //{
-    //    using var database = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
-    //    var playlists = database.Playlists
-    //                .Where(s => s.UsersId == LoginedUserId);
-
-    //    foreach (Playlist playlist in playlists)
-    //        Playlists.Add(playlist);
-    //}
 
     private void InitializeCommands()
     {
@@ -67,9 +54,30 @@ public class SideBarViewModel : ViewModelBase
                         (p) => { return true; },
                         (p) =>
                         {
-                            Playlists.Add(new Playlist() { Name = "My playlist", CreatedDate = DateTime.Now, Description = "", UsersId = LoginedUserId });
-                            OnPropertyChanged(nameof(Playlists));
+                            Playlist addingPlaylist = new Playlist()
+                            {
+                                Name = "My playlist",
+                                CreatedDate = DateTime.Now,
+                                Description = "",
+                                UsersId = LoginedUserId,
+                            };
+
+                            Playlists.Add(addingPlaylist);
+
+                            using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+                            {
+                                context.Playlists.Add(addingPlaylist);
+                            }
                         }
                     );
+
+        CloseWindowCommand = new RelayCommand<object>
+        (
+            (p) => { return true; },
+            (p) =>
+            {
+                Application.Current.MainWindow.Close();
+            }
+        );
     }
 }

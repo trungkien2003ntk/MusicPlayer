@@ -22,6 +22,7 @@ namespace MVVM_Basics.ViewModels
         ObservableCollection<Song> SongQueue { get; set; }
 
         public void AddSongToQueue(Song s);
+        public void RemoveSongFromQueue(Song s);
     }
 
 
@@ -66,26 +67,20 @@ namespace MVVM_Basics.ViewModels
             set { _SongQueue = value; }
         }
 
-
-        private MusicPlayerVpContext _Database;
         private readonly IServiceProvider _ServiceProvider;
 
         public SharedDataContext(IServiceProvider serviceProvider)
         {
             _ServiceProvider = serviceProvider;
-            _Database = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
-            LoginedUserId = _Database.Users.Where(x => x.Name == "admin").FirstOrDefault()!.Id;
+
+            using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
+            {
+                LoginedUserId = context.Users.Where(x => x.Name == "admin").FirstOrDefault()!.Id;
+                CurrentPlayingSong = context.Songs.First();
+            }
+
             CurrentOpeningPlaylist = null;
             _SongQueue = new();
-            _AllPlaylists = new();
-
-
-            // Startup CurrentPlayingSong
-            CurrentPlayingSong = new Song()
-            {
-                Id = 100,
-                PcLink = "C:\\Users\\ADMIN\\Downloads\\Music\\Songs\\Tăng Duy Tân - Bên Trên Tầng Lầu - Official Lyric Video.mp3",
-            };
 
             PopulateCollection();
         }
@@ -93,16 +88,21 @@ namespace MVVM_Basics.ViewModels
         private void PopulateCollection()
         {
             using var database = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
-            var playlists = database.Playlists
-                        .Where(s => s.UsersId == LoginedUserId);
+            AllPlaylists = new(database.Playlists
+                                .Where(s => s.UsersId == LoginedUserId));
 
-            foreach (Playlist playlist in playlists)
-                AllPlaylists.Add(playlist);
         }
 
         public void AddSongToQueue(Song song)
         {
             SongQueue.Add(song);
         }
+
+        public void RemoveSongFromQueue(Song song)
+        {
+            SongQueue.Remove(song);
+        }
+
+        
     }
 }

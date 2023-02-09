@@ -7,32 +7,30 @@ namespace MVVM_Basics.ViewModels;
 
 public class TitleBarViewModel : ViewModelBase
 {
-    #region Commands
     public ICommand CloseWindowCommand { get; set; }
     public ICommand MaximizeWindowCommand { get; set; }
     public ICommand MinimizeWindowCommand { get; set; }
-    #endregion Commands
 
     public TitleBarViewModel()
     {
-        CloseWindowCommand = new RelayCommand<UserControl>
+        CloseWindowCommand = new RelayCommand<Window>
         (
             (p) => { return true; },
             (p) => 
             {
-                Window parent = (GetRootParent(p) as Window)!;
+                Window parent = p;
 
                 if (parent!=null)
                     parent.Close();
             }
         );
 
-        MaximizeWindowCommand = new RelayCommand<UserControl>
+        MaximizeWindowCommand = new RelayCommand<Window>
         (
             (p) => { return true; },
             (p) =>
             {
-                Window parent = (GetRootParent(p) as Window)!;
+                Window parent = p;
 
                 if (parent != null)
                 {
@@ -48,12 +46,12 @@ public class TitleBarViewModel : ViewModelBase
             }
         );
 
-        MinimizeWindowCommand = new RelayCommand<UserControl>
+        MinimizeWindowCommand = new RelayCommand<Window>
         (
             (p) => { return true; },
             (p) =>
             {
-                Window parent = (GetRootParent(p) as Window)!;
+                Window parent = p;
 
                 if (parent != null)
                     parent.WindowState = WindowState.Minimized;
@@ -61,15 +59,15 @@ public class TitleBarViewModel : ViewModelBase
         );
     }
 
-    FrameworkElement GetRootParent(UserControl p)
-    {
-        FrameworkElement parent = p;
+    //FrameworkElement GetRootParent(UserControl p)
+    //{
+    //    FrameworkElement parent = p;
 
-        while (parent.Parent != null)
-        {
-            parent = (parent.Parent as FrameworkElement)!;
-        }
+    //    while (parent.Parent != null)
+    //    {
+    //        parent = (parent.Parent as FrameworkElement)!;
+    //    }
 
-        return parent;
-    }
+    //    return parent;
+    //}
 }

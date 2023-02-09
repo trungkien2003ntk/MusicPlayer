@@ -17,10 +17,6 @@ public class LibraryPageViewModel : ViewModelBase
     private readonly IServiceProvider _ServiceProvider;
     private readonly ISharedDataContext _SharedDataContext;
 
-    
-    public ICommand? AddSongToQueueCommand { get; set; }
-    public ICommand? ToggleLikedSongCommand { get; set; }
-
 
     private ObservableCollection<Song> _AllSongs;
     public ObservableCollection<Song> AllSongs
@@ -30,12 +26,12 @@ public class LibraryPageViewModel : ViewModelBase
     }
 
 
-    private ObservableCollection<string> _AllPlaylists;
-    public ObservableCollection<string> AllPlaylistNames
-    {
-        get { return _AllPlaylists; }
-        set { _AllPlaylists = value; OnPropertyChanged(); }
-    }
+    //private ObservableCollection<string> _AllPlaylistNames;
+    //public ObservableCollection<string> AllPlaylistNames
+    //{
+    //    get { return _AllPlaylistNames; }
+    //    set { _AllPlaylistNames = value; OnPropertyChanged(); }
+    //}
 
 
     public LibraryPageViewModel(IServiceProvider serviceProvider, ISharedDataContext sharedDataContext)
@@ -43,11 +39,12 @@ public class LibraryPageViewModel : ViewModelBase
         _ServiceProvider = serviceProvider;
         _SharedDataContext = sharedDataContext;
         _AllSongs = new();
-        _AllPlaylists = new();
+        //_AllPlaylistNames = new();
+        
 
         Messenger.Default.Register<AddSongToQueueMessage>(this, HandleAddSongToQueue);
         PopulateCollection();
-        InitializeCommands();
+        //InitializeCommands();
     }
 
     private void HandleAddSongToQueue(AddSongToQueueMessage message)
@@ -69,53 +66,53 @@ public class LibraryPageViewModel : ViewModelBase
             AllSongs.Add(song);
         }
 
-        foreach (var playlist in context.Playlists)
-        { 
-            AllPlaylistNames.Add(playlist.Name!);
-        }
+        //foreach (var playlist in context.Playlists)
+        //{ 
+        //    AllPlaylistNames.Add(playlist.Name!);
+        //}
     }
     
-    private void InitializeCommands()
-    {
-        AddSongToQueueCommand = new RelayCommand<Song>
-            (
-                (s) => { return true; },
-                (s) =>
-                {
-                    _SharedDataContext.AddSongToQueue(s);
-                }
-            );
+    //private void InitializeCommands()
+    //{
+    //    AddSongToQueueCommand = new RelayCommand<Song>
+    //        (
+    //            (s) => { return true; },
+    //            (s) =>
+    //            {
+    //                _SharedDataContext.AddSongToQueue(s);
+    //            }
+    //        );
 
-        ToggleLikedSongCommand = new RelayCommand<Song>
-            (
-                (s) => { return true; },
-                (s) =>
-                {
-                    using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
+    //    ToggleLikedSongCommand = new RelayCommand<Song>
+    //        (
+    //            (s) => { return true; },
+    //            (s) =>
+    //            {
+    //                using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
 
-                    var likedSongToRemove = context.LikedSongs.Where(ls => ls.UsersId == _SharedDataContext.LoginedUserId && ls.SongId == s.Id).FirstOrDefault();
-                    if (likedSongToRemove != null) 
-                    {
-                        context.LikedSongs.Remove(likedSongToRemove);
-                    }
-                    else
-                    {
-                        var likedSongToAdd = new LikedSong
-                        {
-                            UsersId = _SharedDataContext.LoginedUserId,
-                            SongId = s.Id,
-                        };
+    //                var likedSongToRemove = context.LikedSongs.Where(ls => ls.UsersId == _SharedDataContext.LoginedUserId && ls.SongId == s.Id).FirstOrDefault();
+    //                if (likedSongToRemove != null) 
+    //                {
+    //                    context.LikedSongs.Remove(likedSongToRemove);
+    //                }
+    //                else
+    //                {
+    //                    var likedSongToAdd = new LikedSong
+    //                    {
+    //                        UsersId = _SharedDataContext.LoginedUserId,
+    //                        SongId = s.Id,
+    //                    };
 
-                        context.LikedSongs.Add(likedSongToAdd);
-                    }
+    //                    context.LikedSongs.Add(likedSongToAdd);
+    //                }
 
-                    OnPropertyChanged(nameof(s));
-                    context.SaveChanges();
+    //                OnPropertyChanged(nameof(s));
+    //                context.SaveChanges();
 
-                    context.Dispose();
-                }
-            );
-    }
+    //                context.Dispose();
+    //            }
+    //        );
+    //}
 
 
     public async void AddSongToLibrary(string filePath)

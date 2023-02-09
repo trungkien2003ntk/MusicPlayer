@@ -1,6 +1,8 @@
 ﻿using Id3;
 using Microsoft.Extensions.DependencyInjection;
+using MVVM_Basics.EventAndCommandHandlers;
 using MVVM_Basics.Models;
+using MVVM_Basics.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +16,9 @@ public class LikedSongsPageViewModel : ViewModelBase
 {
     private readonly ISharedDataContext _SharedDataContext;
     private readonly IServiceProvider _ServiceProvider;
+    private readonly IPlaylistManager _PlaylistManager;
+
+
     private ObservableCollection<Song>? _LikedSongsList;
     public ObservableCollection<Song>? LikedSongsList
     {
@@ -23,7 +28,6 @@ public class LikedSongsPageViewModel : ViewModelBase
 
 
     private User _LoginedUser;
-
     public User LoginedUser
     {
         get { return _LoginedUser; }
@@ -39,16 +43,25 @@ public class LikedSongsPageViewModel : ViewModelBase
     }
 
 
+    //private ObservableCollection<string>? _AllPlaylistNames;
+    //public ObservableCollection<string>? AllPlaylistNames
+    //{
+    //    get { return _AllPlaylistNames; }
+    //    set { _AllPlaylistNames = value; OnPropertyChanged(); }
+    //}
+
+
     public LikedSongsPageViewModel(IServiceProvider serviceProvider)
     {
         _ServiceProvider = serviceProvider;
-
         _SharedDataContext = _ServiceProvider.GetRequiredService<ISharedDataContext>();
-
+        _PlaylistManager = _ServiceProvider.GetRequiredService<IPlaylistManager>();
+        
         PopulateCollection();
 
         TotalSongs = LikedSongsList!.Count;
 
+        // Get Logined User -> binding name
         using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
         {
             _LoginedUser = context.Users.Where(u => u.Id == _SharedDataContext.LoginedUserId).FirstOrDefault()!;
@@ -57,19 +70,25 @@ public class LikedSongsPageViewModel : ViewModelBase
 
     private void PopulateCollection()
     {
-        LikedSongsList = new();
-
-        using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
-
-        var likedSongIds = new List<int>();
-        foreach (var likedSong in context.LikedSongs)
+        using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
         {
-            likedSongIds.Add(likedSong.SongId);
-        }
+            LikedSongsList = new();
 
-        foreach (var likedSongId in likedSongIds)
-        {
-            LikedSongsList.Add(context.Songs.FirstOrDefault(s => s.Id == likedSongId)!);
-        }
+            var likedSongIds = new List<int>();
+            foreach (var likedSong in context.LikedSongs)
+            {
+                likedSongIds.Add(likedSong.SongId);
+            }
+
+            foreach (var likedSongId in likedSongIds)
+            {
+                LikedSongsList.Add(context.Songs.FirstOrDefault(s => s.Id == likedSongId)!);
+            }
+        }   
+    }
+
+    protected override void OnSongRemoved(LikedSong likedSongToRemove)
+    {
+        LikedSongsList!.Remove(LikedSongsList.Where(s => s.Id == likedSongToRemove.SongId).FirstOrDefault()!);
     }
 }
