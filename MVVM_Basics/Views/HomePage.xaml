@@ -14,139 +14,275 @@
              TextOptions.TextRenderingMode="Auto"
              Background="{DynamicResource MaterialDesignPaper}"
              FontFamily="{DynamicResource MaterialDesignFont}"
-             
-             xmlns:views="clr-namespace:MVVM_Basics.Views"
-             
+             xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
+             xmlns:converters="clr-namespace:MVVM_Basics.Views.Converter"     
              d:DesignHeight="610" d:DesignWidth="800">
-    <materialDesign:Card
-                Width="auto"
-                Background="#121212"
-                Style="{DynamicResource MaterialDesignOutlinedCard}">
-        <ScrollViewer Style="{DynamicResource scrollViewerMainStyle}">
-            <Grid Margin="20 70 0 0">
-                <StackPanel Height="250" VerticalAlignment="Top">
-                    <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Recently Played"/>
-                    <WrapPanel Orientation="Horizontal" >
-                        <materialDesign:Card Width="100" Height="150" 
-                                             Margin="20 0 10 0"
-                                             Background="{DynamicResource gradientCardBackground}"
-                                             materialDesign:ElevationAssist.Elevation="Dp8">
+    <UserControl.Resources>
+        <converters:MyBoolToShowAllButtonContentConverter x:Key="MyBoolToShowAllButtonContentConverter"/>
+        <converters:SongToSongCoverImageConverter x:Key="SongToSongCoverImageConverter"/>
+        <converters:SongToSongArtistConverter x:Key="SongToSongArtistConverter"/>
+    </UserControl.Resources>
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientHomeBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
+            
+            <ScrollViewer Grid.Row="1" Style="{DynamicResource scrollViewerMainStyle}">
+                <Grid Margin="20 0 0 0">
+                    <ScrollViewer VerticalAlignment="Top">
+                        <StackPanel>
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
+                                <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Recently Played"/>
+                                <ToggleButton HorizontalAlignment="Right"
+                                              Width="auto"
+                                              FontSize="20"
+                                              Cursor="Hand"
+                                              Margin="10"
+                                              FontFamily="{DynamicResource CircularBlack}"
+                                              Command="{Binding ShowAllCommand}"
+                                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                                              IsChecked="False">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <TextBlock>
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="TextDecorations" Value="None"/>
+                                                                <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton,Mode=FindAncestor}, Path=IsChecked, Converter={StaticResource MyBoolToShowAllButtonContentConverter}}"/>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="TextDecorations" Value="Underline"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                        <Border Name="OuterBorder" BorderThickness="0,1,0,0" >
+                                                            <Border Name="InnerBorder" BorderThickness="0,1,0,1" >
+                                                                <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
 
-                                <!--Thumbnail-->
-                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
-                                    </Border.Background>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
-                                    </Border.Effect>
-                                </Border>
 
-                                <!--Title-->
-                                <TextBlock Text="Indigo by RM" Grid.Row="1"
-                                           Style="{DynamicResource txblCardStyle}">
-
-                                </TextBlock>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
                             </Grid>
-                        </materialDesign:Card>
+                        
+                            <!--Recently Played song list-->
+                            <ItemsControl ItemsSource="{Binding RecentlyPlayedSongs}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                        <materialDesign:Card Width="100" Height="150" 
-                                             Margin="20 0 10 0"
-                                             Background="{DynamicResource gradientCardBackground}"
-                                             materialDesign:ElevationAssist.Elevation="Dp8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="150" CornerRadius="6" Height="200" Margin="0 20 20 0"
+                                                PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
+                                                Tag="{Binding}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{DynamicResource gradientCardBackground}"/>
 
-                                <!--Thumbnail-->
-                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
-                                    </Border.Background>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
-                                    </Border.Effect>
-                                </Border>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource gradientCardBackground.Hover}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
 
-                                <!--Title-->
-                                <TextBlock Text="Indigo by RM" Grid.Row="1"
-                                           Style="{DynamicResource txblCardStyle}">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=Border, Mode=FindAncestor}}"/>
+                                                    <RowDefinition Height="1*"/>
+                                                    <RowDefinition Height="1*"/>
+                                                </Grid.RowDefinitions>
 
-                                </TextBlock>
-                            </Grid>
-                        </materialDesign:Card>
+                                                <!--Thumbnail-->
+                                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="{Binding Path=., Converter={StaticResource SongToSongCoverImageConverter}}"/>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                                    </Border.Effect>
+                                                </Border>
 
-                        <materialDesign:Card Width="100" Height="150" 
-                                             Margin="20 0 10 0"
-                                             Background="{DynamicResource gradientCardBackground}"
-                                             materialDesign:ElevationAssist.Elevation="Dp8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
+                                                <!--Title-->
+                                                <TextBlock Text="{Binding Name}" Grid.Row="1"
+                                                           Style="{DynamicResource txblCardStyle}">
+                                                </TextBlock>
+                                                <!--Title-->
+                                                <TextBlock Text="{Binding Path=., Converter={StaticResource SongToSongArtistConverter}}" Grid.Row="2"
+                                                           Style="{DynamicResource txblCardStyle}"
+                                                           FontWeight="Normal"
+                                                           Foreground="#a7a7a7">
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        
+                        <!--<WrapPanel Orientation="Horizontal" >
+                            <materialDesign:Card Width="100" Height="150" 
+                                                 Margin="20 0 10 0"
+                                                 Background="{DynamicResource gradientCardBackground}"
+                                                 materialDesign:ElevationAssist.Elevation="Dp8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
 
-                                <!--Thumbnail-->
-                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
-                                    </Border.Background>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
-                                    </Border.Effect>
-                                </Border>
+                                    --><!--Thumbnail--><!--
+                                    <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
+                                        </Border.Background>
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                        </Border.Effect>
+                                    </Border>
 
-                                <!--Title-->
-                                <TextBlock Text="Indigo by RM" Grid.Row="1"
-                                           Style="{DynamicResource txblCardStyle}">
+                                    --><!--Title--><!--
+                                    <TextBlock Text="Indigo by RM" Grid.Row="1"
+                                               Style="{DynamicResource txblCardStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </materialDesign:Card>
 
-                                </TextBlock>
-                            </Grid>
-                        </materialDesign:Card>
+                            <materialDesign:Card Width="100" Height="150" 
+                                                 Margin="20 0 10 0"
+                                                 Background="{DynamicResource gradientCardBackground}"
+                                                 materialDesign:ElevationAssist.Elevation="Dp8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
 
-                        <materialDesign:Card Width="100" Height="150" 
-                                             Margin="20 0 10 0"
-                                             Background="{DynamicResource gradientCardBackground}"
-                                             materialDesign:ElevationAssist.Elevation="Dp8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
+                                    --><!--Thumbnail--><!--
+                                    <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
+                                        </Border.Background>
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                        </Border.Effect>
+                                    </Border>
 
-                                <!--Thumbnail-->
-                                <Border Grid.Row="0" CornerRadius="5" Margin="10">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
-                                    </Border.Background>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
-                                    </Border.Effect>
-                                </Border>
+                                    --><!--Title--><!--
+                                    <TextBlock Text="Indigo by RM" Grid.Row="1"
+                                               Style="{DynamicResource txblCardStyle}">
 
-                                <!--Title-->
-                                <TextBlock Text="Indigo by RM" Grid.Row="1"
-                                           Style="{DynamicResource txblCardStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </materialDesign:Card>
 
-                                </TextBlock>
-                            </Grid>
-                        </materialDesign:Card>
-                    </WrapPanel>
-                </StackPanel>
-            </Grid>
+                            <materialDesign:Card Width="100" Height="150" 
+                                                 Margin="20 0 10 0"
+                                                 Background="{DynamicResource gradientCardBackground}"
+                                                 materialDesign:ElevationAssist.Elevation="Dp8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+
+                                    --><!--Thumbnail--><!--
+                                    <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
+                                        </Border.Background>
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                        </Border.Effect>
+                                    </Border>
+
+                                    --><!--Title--><!--
+                                    <TextBlock Text="Indigo by RM" Grid.Row="1"
+                                               Style="{DynamicResource txblCardStyle}">
+
+                                    </TextBlock>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Width="100" Height="150" 
+                                                 Margin="20 0 10 0"
+                                                 Background="{DynamicResource gradientCardBackground}"
+                                                 materialDesign:ElevationAssist.Elevation="Dp8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding Path=Width, RelativeSource={RelativeSource AncestorType=materialDesign:Card, Mode=FindAncestor}}"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+
+                                    --><!--Thumbnail--><!--
+                                    <Border Grid.Row="0" CornerRadius="5" Margin="10">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{DynamicResource DefaultPlaylistCoverImage}"/>
+                                        </Border.Background>
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="30" ShadowDepth="3" Opacity=".8"/>
+                                        </Border.Effect>
+                                    </Border>
+
+                                    --><!--Title--><!--
+                                    <TextBlock Text="Indigo by RM" Grid.Row="1"
+                                               Style="{DynamicResource txblCardStyle}">
+
+                                    </TextBlock>
+                                </Grid>
+                            </materialDesign:Card>
+                        </WrapPanel>-->
+                    </ScrollViewer>
+                </Grid>
             
 
-        </ScrollViewer>
+            </ScrollViewer>
+            
+        </Grid>
     </materialDesign:Card>
 </UserControl>

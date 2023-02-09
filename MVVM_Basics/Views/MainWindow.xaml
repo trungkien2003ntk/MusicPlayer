@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MVVM_Basics"
+        xmlns:local="clr-namespace:MVVM_Basics.Views"
         mc:Ignorable="d"
         
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -16,9 +16,8 @@
         FontFamily="{DynamicResource MainFont}"
         
         xmlns:dviewmodels="clr-namespace:MVVM_Basics.ViewModels"
-        d:DataContext="{d:DesignInstance dviewmodels:MainWindowViewModel, IsDesignTimeCreatable=True}"
         WindowStyle="None"
-        xmlns:views="clr-namespace:MVVM_Basics.Views"
+        MinWidth="1050" MinHeight="700"
         Title="MainWindow" Height="700" Width="1050">
     <materialDesign:Card
                 Width="auto"
@@ -26,28 +25,28 @@
                 Style="{DynamicResource MaterialDesignOutlinedCard}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" MinHeight="450"/>
                 <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" MinWidth="750"/>
             </Grid.ColumnDefinitions>
 
-            <ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding CurrentViewModel}"/>
-
-            <!--Title bar-->
-            <views:TitleBar
-                Grid.Row="0" Grid.Column="1" 
-                VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                
+            <!--Page's content-->
+            <ContentControl x:Name="pageContent" Visibility="{Binding ContentControlVisibility}" Grid.Row="0" Grid.Column="1" Content="{Binding CurrentViewModel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             
+            <!--Toast Notification-->
+            <ContentControl x:Name="toastControl" Height="45" Margin="0 0 0 10"  Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+
             <!--Side bar-->
-            <views:SideBar 
+            <local:SideBar
                 Height="auto"
                 Grid.Row="0" Grid.Column="0"/>
 
             <!--Song Control-->
-            <views:SongControl Grid.Row="1" Grid.ColumnSpan="2"/>
+            <local:SongControl Grid.Row="1" Grid.ColumnSpan="2"/>
         </Grid>
         
     </materialDesign:Card>

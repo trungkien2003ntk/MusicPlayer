@@ -6,9 +6,11 @@ using MVVM_Basics.Interfaces;
 using MVVM_Basics.Models;
 using MVVM_Basics.ViewModels;
 using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MVVM_Basics.Views;
 
@@ -19,6 +21,9 @@ public partial class LibraryPage : UserControl
         InitializeComponent();
 
         DataContext = App.AppHost!.Services.GetRequiredService<LibraryPageViewModel>();
+
+        // Set titlebar's background
+        titleBar.Background = ColorHelper.GetGradientColorAtIndex((rootControl.Background as LinearGradientBrush)!, 0);
     }
 
     private void btnImportSong_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -42,19 +47,6 @@ public partial class LibraryPage : UserControl
         }
     }
 
-
-    // Double click event to play the song
-    private void lvAllSongs_PreviewMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-        if (e.ChangedButton == MouseButton.Left)
-        {
-            var selectedSong = lvAllSongs.SelectedItem as Song;
-
-            Messenger.Default.Send(new ChangeSongMessage(selectedSong!));
-        }
-    }
-
-
     // Bubble scrolling the listview
     private void lvAllSongs_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
     {
@@ -62,7 +54,7 @@ public partial class LibraryPage : UserControl
         {
             e.Handled = true;
             var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-            eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+            eventArg.RoutedEvent = MouseWheelEvent;
             eventArg.Source = sender;
 
             var parent = scrollViewerMain as UIElement;

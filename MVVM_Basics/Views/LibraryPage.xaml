@@ -20,29 +20,38 @@
     <UserControl.Resources>
         <converter:SongToLikedSongTitleConverter x:Key="SongToLikedSongTitleConverter"/>
     </UserControl.Resources>
-    <materialDesign:Card
-                Width="auto"
-                Background="#121212"
-                Style="{DynamicResource MaterialDesignOutlinedCard}">
-        <ScrollViewer Style="{DynamicResource scrollViewerMainStyle}" x:Name="scrollViewerMain">
-            <Grid Margin="20 70 0 0">
-                <StackPanel VerticalAlignment="Top">
-                    <!--#1 title-->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Songs"/>
-                        <Button x:Name="btnImportSong" Margin="30 0 0 0" Content="Import Song" Click="btnImportSong_Click"/>
-                    </StackPanel>
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientHomeBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                    <!--#1 List-->
-                    <ListView Grid.Row="2" 
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
+
+            <ScrollViewer Grid.Row="1" Style="{DynamicResource scrollViewerMainStyle}" x:Name="scrollViewerMain">
+                <Grid Margin="20 0 0 0">
+                    <StackPanel VerticalAlignment="Top">
+                        <!--#1 title-->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{DynamicResource txblTitleStyle}" Text="Songs"/>
+                            <Button x:Name="btnImportSong" Margin="30 0 0 0" Content="Import Song" Click="btnImportSong_Click"/>
+                        </StackPanel>
+
+                        <!--#1 List-->
+                        <ListView Grid.Row="2" 
                               x:Name="lvAllSongs"
                               Style="{DynamicResource songListStyle}"
-                              PreviewMouseDoubleClick="lvAllSongs_PreviewMouseDoubleClick"
-                              PreviewMouseWheel="lvAllSongs_PreviewMouseWheel"
                               ItemsSource="{Binding AllSongs}">
-                    </ListView>
-                </StackPanel>
-            </Grid>
-        </ScrollViewer>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
     </materialDesign:Card>
 </UserControl>

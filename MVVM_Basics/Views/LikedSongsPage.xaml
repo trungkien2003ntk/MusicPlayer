@@ -17,96 +17,122 @@
              
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer CanContentScroll="True">
-        <ScrollViewer.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#24ef6b" Offset="0.1" />
-                <GradientStop Color="#20cc5b" Offset="0.2" />
-
-                <GradientStop Color="#101010" Offset="0.8" />
-                <GradientStop Color="#121212" Offset="1.0" />
-            </LinearGradientBrush>
-        </ScrollViewer.Background>
-
-        <Grid Margin="0 30 0 0">
+    <materialDesign:Card x:Name="rootControl"
+                         Width="auto"
+                         Background="{DynamicResource gradientLikedSongsHeaderBackground}"
+                         Style="{DynamicResource MaterialDesignOutlinedCard}">
+        <Grid MinWidth="750">
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+            <!--Title bar-->
+            <local:TitleBar x:Name="titleBar"
+                            Grid.Row="0"/>
 
-                <Border Margin="40" Background="{DynamicResource gradientLikedSongsIcon}" CornerRadius="5">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#0e4421"
-                                          Direction="240"
-                                          ShadowDepth="8"
-                                          Opacity="0.4"
-                                          BlurRadius="30"/>
+            <ScrollViewer x:Name="scrollViewerMain" Grid.Row="1" CanContentScroll="True"
+                          VerticalScrollBarVisibility="Auto"
+                          MouseEnter="scrollViewerMain_MouseEnter"
+                          MouseLeave="scrollViewerMain_MouseLeave">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-
-                    </Border.Effect>
-                    
-                    <materialDesign:PackIcon Width="60" Height="60" Kind="Heart" Margin="0" Padding="5" Background="Transparent" Foreground="White" Style="{DynamicResource sideMenuIcon}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    </materialDesign:PackIcon>
-                </Border>
-
-                <StackPanel Grid.Column="1" 
-                            Orientation="Vertical" 
-                            VerticalAlignment="Bottom"
-                            Margin="0 0 0 20">
-                    <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
-                               VerticalAlignment="Bottom"
-                               Text="PLAYLIST"/>
-                    <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
-                               Text="Liked Songs"
-                               FontSize="60"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding LoginedUser.Name}"
-                                   Style="{DynamicResource txblPlaylistInfoStyle}"
-                                   Foreground="White"/>
-                        <TextBlock Text="{Binding TotalSongs, StringFormat={}{0} songs\,}"
-                                   Style="{DynamicResource txblPlaylistInfoStyle}"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-
-
-
-            <DockPanel Grid.Row="1">
-                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" 
-                        DockPanel.Dock="Left"
-                        Margin="40 0 0 0"
-                        HorizontalAlignment="Left"
-                        Background="#1ed760"
-                        Foreground="Black"
-                        BorderBrush="Transparent"
-                        Width="60" Height="60"
+                    <!--Header-->
+                    <Grid Background="{DynamicResource gradientLikedSongsHeaderBackground}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
                         
-                        Content="{materialDesign:PackIcon Kind=Play,Size=40}"/>
+                        <Border Margin="40" Background="{DynamicResource gradientLikedSongsIcon}" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#0e4421"
+                                              Direction="240"
+                                              ShadowDepth="8"
+                                              Opacity="0.4"
+                                              BlurRadius="30"/>
 
-                <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
-                        Content="{materialDesign:PackIcon Kind=DownloadCircleOutline,Size=40}"
-                        Background="Transparent" BorderBrush="Transparent"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Left"
-                        Margin="15 0 0 0"
-                        Foreground="White"/>
 
-            </DockPanel>
+                            </Border.Effect>
 
-            <ListView Grid.Row="2" Style="{DynamicResource songListStyle}"
-                      ItemsSource="{Binding LikedSongsList}">
+                            <materialDesign:PackIcon Width="60" Height="60" Kind="Heart" Margin="0" Padding="5" Background="Transparent" Foreground="White" Style="{DynamicResource sideMenuIcon}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            </materialDesign:PackIcon>
+                        </Border>
 
-            </ListView>
+                        <StackPanel Grid.Column="1" 
+                                Orientation="Vertical" 
+                                VerticalAlignment="Bottom"
+                                Margin="0 0 0 20">
+                            <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
+                                   VerticalAlignment="Bottom"
+                                   Text="PLAYLIST"/>
+                            <TextBlock Style="{DynamicResource txblPlaylistTitleStyle}"
+                                   Text="Liked Songs"
+                                   FontSize="60"/>
+                            <StackPanel Orientation="Horizontal" Height="30">
+                                <TextBlock Text="{Binding LoginedUser.Name}"
+                                           Style="{DynamicResource txblPlaylistInfoStyle}"
+                                           Margin="5 0 0 5"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Bottom"
+                                           FontFamily="{StaticResource CircularBlack}"
+                                           Foreground="White"
+                                           d:Text="admin"/>
+                                <TextBlock Text="{Binding TotalSongs, StringFormat={}\• {0} songs}"
+                                           Style="{DynamicResource txblPlaylistInfoStyle}"
+                                           Margin="5 0 0 4"
+                                           VerticalAlignment="Bottom"
+                                           Foreground="White"
+                                           d:Text="• 100 songs"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+
+                    <Grid Grid.RowSpan="2" Background="{DynamicResource gradientLikedSongsContentBackground}" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <DockPanel Grid.Row="0">
+                            <!--Play button-->
+                            <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" 
+                                DockPanel.Dock="Left"
+                                Margin="40 0 0 0"
+                                HorizontalAlignment="Left"
+                                Background="#1ed760"
+                                Foreground="Black"
+                                BorderBrush="Transparent"
+                                Width="60" Height="60"
+                                Content="{materialDesign:PackIcon Kind=Play,Size=40}"/>
+
+                            <!--Download button-->
+                            <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
+                                Content="{materialDesign:PackIcon Kind=DownloadCircleOutline,Size=40}"
+                                Background="Transparent" BorderBrush="Transparent"
+                                HorizontalAlignment="Left"
+                                DockPanel.Dock="Left"
+                                Margin="15 0 0 0"
+                                Foreground="White"/>
+
+                        </DockPanel>
+
+                        <ListView Grid.Row="1" Style="{DynamicResource songListStyle}"
+                                  PreviewMouseWheel="lvAllSongs_PreviewMouseWheel"
+                                  ItemsSource="{Binding LikedSongsList}">
+
+                        </ListView>
+                    </Grid>
+                </Grid>
+
+
+            </ScrollViewer>
         </Grid>
-
-
-    </ScrollViewer>
+    </materialDesign:Card>
 </UserControl>
