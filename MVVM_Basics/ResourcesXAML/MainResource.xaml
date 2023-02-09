@@ -7,12 +7,7 @@
     <!--Images-->
     <BitmapImage x:Key="DefaultPlaylistCoverImage" UriSource="pack://application:,,,/Images/DefaultPlaylistCoverImage.jpeg"/>
     
-    <!-- View  model -->
-    <viewmodel:TitleBarViewModel x:Key="ControlBarVM"/>
-    <viewmodel:HomePageViewModel x:Key="HomePageVM"/>
-    <viewmodel:QueuePageViewModel x:Key="QueuePageVM"/>
-
-
+    
     <!--DataTemplates-->
     <DataTemplate DataType="{x:Type viewmodel:HomePageViewModel}">
         <view:HomePage />
@@ -34,166 +29,60 @@
     </DataTemplate>
     
 
+    <!-- Font Family -->
+    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#SVN-Product Sans"</FontFamily>
+    <FontFamily x:Key="CircularBlack">pack://application:,,,/Fonts/#SVN-Product Sans</FontFamily>
+    <FontFamily x:Key="CircularBook">pack://application:,,,/Fonts/#SVN-Product Sans</FontFamily>
     
 
-    <!-- Font Family -->
-    <FontFamily x:Key="MainFont">"pack://application:,,,/Fonts/#Circular Std Light"</FontFamily>
-    <FontFamily x:Key="CircularBlack">pack://application:,,,/Fonts/#Circular Std Black</FontFamily>
-    <FontFamily x:Key="CircularBook">pack://application:,,,/Fonts/#Circular Std Book</FontFamily>
-        
     <!--Solid color-->
     <SolidColorBrush x:Key="ContextMenuNormalBackground" Color="#282828"/>
     <SolidColorBrush x:Key="ContextMenuHoverBackground" Color="#3e3e3e"/>
+    <SolidColorBrush x:Key="titleBarBackground" Color="#101010" Opacity="1"/>
 
+    
     <!--Gradient Color-->
     <LinearGradientBrush x:Key="gradientHomeBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#222222" Offset="0"/>
+        <GradientStop Color="#121212" Offset="0"/>
         <GradientStop Color="#121212" Offset="1"/>
     </LinearGradientBrush>
-    
     <LinearGradientBrush x:Key="gradientCardBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#171717" Offset="0"/>
         <GradientStop Color="#181818" Offset="1"/>
     </LinearGradientBrush>
-
+    <LinearGradientBrush x:Key="gradientCardBackground.Hover" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#272727" Offset="0"/>
+        <GradientStop Color="#282828" Offset="1"/>
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="gradientLikedSongsIcon" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#1cb050" Offset="0.0" />
         <GradientStop Color="#22d661" Offset="0.3" />
         <GradientStop Color="#b1d5cc" Offset="0.8" />
         <GradientStop Color="#b1d5cc" Offset="1.0" />
     </LinearGradientBrush>
-
-
-    <!-- Style -->
-    <Style x:Key="sideMenuTitle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="#b3b3b3"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontFamily" Value="Gotham Rounded Medium"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="Margin" Value="10 0 0 0"/>
-        <Style.Triggers>
-            <EventTrigger RoutedEvent="TextBlock.MouseEnter">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation From="#b3b3b3" To="White" 
-                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                            BeginTime="0:0:0" Duration="0:0:0.4" >
-                        </ColorAnimation>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-
-            <EventTrigger RoutedEvent="TextBlock.MouseLeave">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation From="White" To="#b3b3b3" 
-                                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                            BeginTime="0:0:0" Duration="0:0:0.4" >
-                        </ColorAnimation>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-        </Style.Triggers>
-
-    </Style>
-
-    <Style x:Key="sideMenuTitleBorder" TargetType="Border">
-        <Setter Property="BorderBrush" Value="{x:Null}"/>
-        <Setter Property="Height" Value="20"/>
-    </Style>
-
-    <Style x:Key="sideMenuButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="Margin" Value="0 5 0 0"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Tag" Value="Collapsed"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="0">
-                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Transparent"></Setter>
-                <Setter Property="Tag" Value="Visible"/>
-            </Trigger>
-
-
-        </Style.Triggers>
-
-    </Style>
-
-    <Style x:Key="sideMenuIcon" TargetType="materialDesign:PackIcon">
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Margin" Value="0 0 10 0"/>
-        <Setter Property="Width" Value="30"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Foreground" Value="#b3b3b3"/>
-        <Style.Triggers>
-            <EventTrigger RoutedEvent="materialDesign:PackIcon.MouseEnter">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation From="#b3b3b3" To="White"  
-                                            Storyboard.TargetProperty="(materialDesign:PackIcon.Foreground).(SolidColorBrush.Color)"
-                                            BeginTime="0:0:0" Duration="0:0:0.4" >
-                        </ColorAnimation>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="materialDesign:PackIcon.MouseLeave">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation From="White"  To="#b3b3b3"  
-                                            Storyboard.TargetProperty="(materialDesign:PackIcon.Foreground).(SolidColorBrush.Color)"
-                                            BeginTime="0:0:0" Duration="0:0:0.4" >
-                        </ColorAnimation>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="currentPlayingSongTitle" TargetType="TextBlock">
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-        <Setter Property="MaxWidth" Value="190"/>
-        <Setter Property="Foreground" Value="#f1f1f1"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontFamily" Value="Gotham Rounded"/>
-        <Setter Property="VerticalAlignment" Value="Bottom"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="TextDecorations" Value="Underline"/>
-                <Setter Property="Cursor" Value="Hand"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="currentPlayingSongArtist" TargetType="TextBlock">
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="Foreground" Value="#929292"/>
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="FontFamily" Value="Gotham Rounded Light"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="TextDecorations" Value="Underline"/>
-                <Setter Property="Cursor" Value="Hand"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+    <LinearGradientBrush x:Key="gradientLikedSongsHeaderBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#24ef6b" Offset="0" />
+        <GradientStop Color="#1dc859" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="gradientLikedSongsContentBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#18a248" Offset="0" />
+        <GradientStop Color="#106e31" Offset="0.1" />
+        <GradientStop Color="#101010" Offset="0.3" />
+        <GradientStop Color="#121212" Offset="1.0" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="gradientLikedSongsBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#24ef6b" Offset="0.1" />
+        <GradientStop Color="#20cc5b" Offset="0.2" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="gradientPlaylistBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#debf81" Offset="0.1" />
+        <GradientStop Color="#debf81" Offset="0.2" />
+        <GradientStop Color="#101010" Offset="0.8" />
+        <GradientStop Color="#121212" Offset="1.0" />
+    </LinearGradientBrush>
+        
+    <!--Style-->
+    
 
     <Style x:Key="btnLikeStyle" TargetType="ToggleButton" x:Name="btnLike">
         <Setter Property="Content" Value="{materialDesign:PackIcon Kind=HeartOutline,Size=40}"/>

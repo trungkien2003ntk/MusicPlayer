@@ -135,6 +135,48 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region Button Template-->
+    <ControlTemplate x:Key="ButtonTemplate1" TargetType="{x:Type ButtonBase}">
+        <Grid>
+            <AdornerDecorator CacheMode="{Binding (wpf:ShadowAssist.CacheMode), RelativeSource={RelativeSource Self}}">
+                <Grid>
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (wpf:ButtonAssist.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" Effect="{Binding (wpf:ElevationAssist.Elevation), Converter={x:Static converters:ShadowConverter.Instance}, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    <ProgressBar x:Name="ProgressBar" Background="{Binding (wpf:ButtonProgressAssist.IndicatorBackground), RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{Binding (wpf:ButtonProgressAssist.IndicatorBackground), RelativeSource={RelativeSource TemplatedParent}}" Foreground="{Binding (wpf:ButtonProgressAssist.IndicatorForeground), RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Left" Height="{TemplateBinding Height}" IsIndeterminate="{Binding (wpf:ButtonProgressAssist.IsIndeterminate), RelativeSource={RelativeSource TemplatedParent}}" Maximum="{Binding (wpf:ButtonProgressAssist.Maximum), RelativeSource={RelativeSource TemplatedParent}}" Minimum="{Binding (wpf:ButtonProgressAssist.Minimum), RelativeSource={RelativeSource TemplatedParent}}" Opacity="{Binding (wpf:ButtonProgressAssist.Opacity), RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource MaterialDesignLinearProgressBar}" Value="{Binding (wpf:ButtonProgressAssist.Value), RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Center" Visibility="{Binding (wpf:ButtonProgressAssist.IsIndicatorVisible), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ButtonBase}}}">
+                        <ProgressBar.Clip>
+                            <MultiBinding Converter="{StaticResource BorderClipConverter}">
+                                <Binding ElementName="border" Path="ActualWidth"/>
+                                <Binding ElementName="border" Path="ActualHeight"/>
+                                <Binding ElementName="border" Path="CornerRadius"/>
+                                <Binding ElementName="border" Path="BorderThickness"/>
+                            </MultiBinding>
+                        </ProgressBar.Clip>
+                    </ProgressBar>
+                </Grid>
+            </AdornerDecorator>
+            <wpf:Ripple ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Focusable="False" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                <wpf:Ripple.Clip>
+                    <MultiBinding Converter="{StaticResource BorderClipConverter}">
+                        <Binding ElementName="border" Path="ActualWidth"/>
+                        <Binding ElementName="border" Path="ActualHeight"/>
+                        <Binding ElementName="border" Path="CornerRadius"/>
+                        <Binding ElementName="border" Path="BorderThickness"/>
+                    </MultiBinding>
+                </wpf:Ripple.Clip>
+            </wpf:Ripple>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="true">
+                <Setter Property="wpf:ShadowAssist.Darken" TargetName="border" Value="True"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Opacity" Value="0.38"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
+
     <Style x:Key="trackControlTxblDuration" TargetType="TextBlock">
         <Setter Property="Margin" Value="4"/>
         <Setter Property="TextAlignment" Value="Center"/>
@@ -203,45 +245,36 @@
         </Style.Triggers>
     </Style>
 
-    <!--#region Button Template-->
-    <ControlTemplate x:Key="ButtonTemplate1" TargetType="{x:Type ButtonBase}">
-        <Grid>
-            <AdornerDecorator CacheMode="{Binding (wpf:ShadowAssist.CacheMode), RelativeSource={RelativeSource Self}}">
-                <Grid>
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (wpf:ButtonAssist.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" Effect="{Binding (wpf:ElevationAssist.Elevation), Converter={x:Static converters:ShadowConverter.Instance}, RelativeSource={RelativeSource TemplatedParent}}"/>
-                    <ProgressBar x:Name="ProgressBar" Background="{Binding (wpf:ButtonProgressAssist.IndicatorBackground), RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{Binding (wpf:ButtonProgressAssist.IndicatorBackground), RelativeSource={RelativeSource TemplatedParent}}" Foreground="{Binding (wpf:ButtonProgressAssist.IndicatorForeground), RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Left" Height="{TemplateBinding Height}" IsIndeterminate="{Binding (wpf:ButtonProgressAssist.IsIndeterminate), RelativeSource={RelativeSource TemplatedParent}}" Maximum="{Binding (wpf:ButtonProgressAssist.Maximum), RelativeSource={RelativeSource TemplatedParent}}" Minimum="{Binding (wpf:ButtonProgressAssist.Minimum), RelativeSource={RelativeSource TemplatedParent}}" Opacity="{Binding (wpf:ButtonProgressAssist.Opacity), RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource MaterialDesignLinearProgressBar}" Value="{Binding (wpf:ButtonProgressAssist.Value), RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Center" Visibility="{Binding (wpf:ButtonProgressAssist.IsIndicatorVisible), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ButtonBase}}}">
-                        <ProgressBar.Clip>
-                            <MultiBinding Converter="{StaticResource BorderClipConverter}">
-                                <Binding ElementName="border" Path="ActualWidth"/>
-                                <Binding ElementName="border" Path="ActualHeight"/>
-                                <Binding ElementName="border" Path="CornerRadius"/>
-                                <Binding ElementName="border" Path="BorderThickness"/>
-                            </MultiBinding>
-                        </ProgressBar.Clip>
-                    </ProgressBar>
-                </Grid>
-            </AdornerDecorator>
-            <wpf:Ripple ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Focusable="False" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
-                <wpf:Ripple.Clip>
-                    <MultiBinding Converter="{StaticResource BorderClipConverter}">
-                        <Binding ElementName="border" Path="ActualWidth"/>
-                        <Binding ElementName="border" Path="ActualHeight"/>
-                        <Binding ElementName="border" Path="CornerRadius"/>
-                        <Binding ElementName="border" Path="BorderThickness"/>
-                    </MultiBinding>
-                </wpf:Ripple.Clip>
-            </wpf:Ripple>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="true">
+    <Style x:Key="currentPlayingSongTitle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="TextTrimming" Value="WordEllipsis"/>
+        <Setter Property="MaxWidth" Value="190"/>
+        <Setter Property="Foreground" Value="#f1f1f1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Gotham Rounded"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="TextDecorations" Value="Underline"/>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
-            <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter Property="wpf:ShadowAssist.Darken" TargetName="border" Value="True"/>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="currentPlayingSongArtist" TargetType="TextBlock">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="TextTrimming" Value="WordEllipsis"/>
+        <Setter Property="MaxWidth" Value="190"/>
+        <Setter Property="Foreground" Value="#929292"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Gotham Rounded Light"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="TextDecorations" Value="Underline"/>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="0.38"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <!--#endregion-->
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

@@ -250,7 +250,6 @@
     </Style>
 
     <Style TargetType="ScrollViewer" x:Key="scrollViewerMainStyle">
-        <Setter Property="Background" Value="{DynamicResource gradientHomeBackground}"/>
         <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
     </Style>
 </ResourceDictionary>
