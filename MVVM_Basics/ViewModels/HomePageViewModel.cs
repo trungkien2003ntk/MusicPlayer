@@ -36,7 +36,7 @@ public class HomePageViewModel : ViewModelBase
             _RecentlyPlayedSongs = new(
                 context.Songs
                     .Where(s => s.LastestPlayDate != null)
-                    .OrderBy(s => s.LastestPlayDate)
+                    .OrderByDescending(s => s.LastestPlayDate)
                     .ThenBy(s => s.Id)
                     .Take(MAX_SONGS_ON_COLLAPSED)
             );
@@ -57,7 +57,8 @@ public class HomePageViewModel : ViewModelBase
                     {
                         RecentlyPlayedSongs = new(
                             context.Songs
-                                .OrderBy(s => s.LastestPlayDate)
+                                .Where(s => s.LastestPlayDate != null)
+                                .OrderByDescending(s => s.LastestPlayDate)
                                 .ThenBy(s => s.Id)
                                 .Take(MAX_SONGS_ON_SHOWED_ALL)
                         );
@@ -66,7 +67,8 @@ public class HomePageViewModel : ViewModelBase
                     {
                         RecentlyPlayedSongs = new(
                             context.Songs
-                                .OrderBy(s => s.LastestPlayDate)
+                                .Where(s => s.LastestPlayDate != null)
+                                .OrderByDescending(s => s.LastestPlayDate)
                                 .ThenBy(s => s.Id)
                                 .Take(MAX_SONGS_ON_COLLAPSED)
                         );

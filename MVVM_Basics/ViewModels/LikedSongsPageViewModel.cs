@@ -1,6 +1,8 @@
-﻿using Id3;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Id3;
 using Microsoft.Extensions.DependencyInjection;
 using MVVM_Basics.EventAndCommandHandlers;
+using MVVM_Basics.Helpers;
 using MVVM_Basics.Models;
 using MVVM_Basics.Services;
 using System;
@@ -9,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels;
 
@@ -17,6 +20,8 @@ public class LikedSongsPageViewModel : ViewModelBase
     private readonly ISharedDataContext _SharedDataContext;
     private readonly IServiceProvider _ServiceProvider;
     private readonly IPlaylistManager _PlaylistManager;
+
+    public ICommand? AddAllPlaylistSongsToQueue { get; set; }
 
 
     private ObservableCollection<Song>? _LikedSongsList;
@@ -43,20 +48,12 @@ public class LikedSongsPageViewModel : ViewModelBase
     }
 
 
-    //private ObservableCollection<string>? _AllPlaylistNames;
-    //public ObservableCollection<string>? AllPlaylistNames
-    //{
-    //    get { return _AllPlaylistNames; }
-    //    set { _AllPlaylistNames = value; OnPropertyChanged(); }
-    //}
-
-
     public LikedSongsPageViewModel(IServiceProvider serviceProvider)
     {
         _ServiceProvider = serviceProvider;
         _SharedDataContext = _ServiceProvider.GetRequiredService<ISharedDataContext>();
         _PlaylistManager = _ServiceProvider.GetRequiredService<IPlaylistManager>();
-        
+
         PopulateCollection();
 
         TotalSongs = LikedSongsList!.Count;
@@ -66,6 +63,25 @@ public class LikedSongsPageViewModel : ViewModelBase
         {
             _LoginedUser = context.Users.Where(u => u.Id == _SharedDataContext.LoginedUserId).FirstOrDefault()!;
         }
+
+        InitializeCommands();
+    }
+
+    private void InitializeCommands()
+    {
+        AddAllPlaylistSongsToQueue = new RelayCommand<Playlist>(
+                   (p) => { return true; },
+                   (p) =>
+                   {
+                       _SharedDataContext.SongQueue = new(LikedSongsList);
+
+                       if (TotalSongs > 0)
+                       {
+                           Messenger.Default.Send(new ChangeSongMessage(_SharedDataContext.SongQueue[0]));
+
+                           _SharedDataContext.SongQueue.RemoveAt(0);
+                       }
+                   });
     }
 
     private void PopulateCollection()

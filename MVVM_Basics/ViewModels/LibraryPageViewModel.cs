@@ -60,6 +60,8 @@ public class LibraryPageViewModel : ViewModelBase
         {
             AllSongs.Add(song);
         }
+
+        AllSongs = new(AllSongs.Reverse());
     }
     
     
@@ -111,13 +113,13 @@ public class LibraryPageViewModel : ViewModelBase
                 await context.SaveChangesAsync();
 
                 // Add song to AllSongs for display in the UI
-                AllSongs.Add(song);
+                AllSongs.Insert(0, song);
             }
         }
     }
     
     public override void Cleanup()
-        {
+    {
         Messenger.Default.Unregister(this);
     }
 }
