@@ -1,6 +1,5 @@
-﻿using Id3;
-using System;
-using System.Globalization;
+﻿using System.Globalization;
+using System.IO;
 using System.Windows.Media.Imaging;
 using TagLib;
 
@@ -10,19 +9,19 @@ public static class Mp3Helper
 {
     public static string GetTitle(string songPcPath)
     {
-        var file = File.Create(songPcPath);
+        var file = TagLib.File.Create(songPcPath);
 
         string title = file.Tag.Title;
 
         if (!string.IsNullOrEmpty(title)) 
             return new CultureInfo("en-US", false).TextInfo.ToTitleCase(file.Tag.Title.ToLower());
 
-        return "No Title";
+        return Path.GetFileNameWithoutExtension(songPcPath);
     }
 
     public static BitmapImage GetCoverImage(string songPcPath)
     {
-        var file = File.Create(songPcPath);
+        var file = TagLib.File.Create(songPcPath);
 
         if (file.Tag.Pictures.Length != 0)
             return ImageHelper.LoadImage(file.Tag.Pictures[0].Data.Data);
@@ -32,14 +31,14 @@ public static class Mp3Helper
 
     public static double GetDuration(string songPcPath)
     {
-        var file = File.Create(songPcPath);
+        var file = TagLib.File.Create(songPcPath);
 
         return file.Properties.Duration.TotalSeconds;
     }
 
     public static string[] GetArtistNames(string songPcPath)
     {
-        var file = File.Create(songPcPath);
+        var file = TagLib.File.Create(songPcPath);
 
         // Get the Not-separated artist names. Ex: Adams, Kids
         string artistNamesNotSeparated = file.Tag.FirstPerformer;
@@ -59,6 +58,6 @@ public static class Mp3Helper
             return artistNames;
         }
 
-        return new string[]{ "No Artist"};
+        return new string[]{ "V.A."};
     }
 }

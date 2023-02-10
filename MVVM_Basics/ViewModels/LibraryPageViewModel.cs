@@ -4,9 +4,11 @@ using MVVM_Basics.EventAndCommandHandlers;
 using MVVM_Basics.Helpers;
 using MVVM_Basics.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MVVM_Basics.ViewModels;
@@ -26,26 +28,18 @@ public class LibraryPageViewModel : ViewModelBase
     }
 
 
-    //private ObservableCollection<string> _AllPlaylistNames;
-    //public ObservableCollection<string> AllPlaylistNames
-    //{
-    //    get { return _AllPlaylistNames; }
-    //    set { _AllPlaylistNames = value; OnPropertyChanged(); }
-    //}
-
-
     public LibraryPageViewModel(IServiceProvider serviceProvider, ISharedDataContext sharedDataContext)
     {
         _ServiceProvider = serviceProvider;
         _SharedDataContext = sharedDataContext;
         _AllSongs = new();
-        //_AllPlaylistNames = new();
         
 
-        Messenger.Default.Register<AddSongToQueueMessage>(this, HandleAddSongToQueue);
         PopulateCollection();
-        //InitializeCommands();
+
+        Messenger.Default.Register<AddSongToQueueMessage>(this, HandleAddSongToQueue);
     }
+
 
     private void HandleAddSongToQueue(AddSongToQueueMessage message)
     {
@@ -57,6 +51,7 @@ public class LibraryPageViewModel : ViewModelBase
         }
     }
 
+
     private void PopulateCollection()
     {
         using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
@@ -65,56 +60,9 @@ public class LibraryPageViewModel : ViewModelBase
         {
             AllSongs.Add(song);
         }
-
-        //foreach (var playlist in context.Playlists)
-        //{ 
-        //    AllPlaylistNames.Add(playlist.Name!);
-        //}
     }
     
-    //private void InitializeCommands()
-    //{
-    //    AddSongToQueueCommand = new RelayCommand<Song>
-    //        (
-    //            (s) => { return true; },
-    //            (s) =>
-    //            {
-    //                _SharedDataContext.AddSongToQueue(s);
-    //            }
-    //        );
-
-    //    ToggleLikedSongCommand = new RelayCommand<Song>
-    //        (
-    //            (s) => { return true; },
-    //            (s) =>
-    //            {
-    //                using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
-
-    //                var likedSongToRemove = context.LikedSongs.Where(ls => ls.UsersId == _SharedDataContext.LoginedUserId && ls.SongId == s.Id).FirstOrDefault();
-    //                if (likedSongToRemove != null) 
-    //                {
-    //                    context.LikedSongs.Remove(likedSongToRemove);
-    //                }
-    //                else
-    //                {
-    //                    var likedSongToAdd = new LikedSong
-    //                    {
-    //                        UsersId = _SharedDataContext.LoginedUserId,
-    //                        SongId = s.Id,
-    //                    };
-
-    //                    context.LikedSongs.Add(likedSongToAdd);
-    //                }
-
-    //                OnPropertyChanged(nameof(s));
-    //                context.SaveChanges();
-
-    //                context.Dispose();
-    //            }
-    //        );
-    //}
-
-
+    
     public async void AddSongToLibrary(string filePath)
     {
         using var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>();
@@ -122,12 +70,12 @@ public class LibraryPageViewModel : ViewModelBase
         if (File.Exists(filePath))
         {
             // Get the artist name from the mp3 file
-            string[] artistNames = Mp3Helper.GetArtistNames(filePath);
+            List<string> artistNames = Mp3Helper.GetArtistNames(filePath).ToList();
 
             // Add artist to library if it doesn't already exist
-            for (int i = 0; i < artistNames.Length; i++)
-            {
-                var artist = new Artist { Name = artistNames[i] };
+            foreach (string artistName in artistNames)
+            { 
+                var artist = new Artist { Name = artistName };
 
                 if (!context.Artists.Any(a => a.Name == artist.Name))
                     context.Artists.Add(artist);
