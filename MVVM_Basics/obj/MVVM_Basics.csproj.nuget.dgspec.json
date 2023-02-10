@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj": {}
+    "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\MVVM_Basics.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj": {
+    "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\MVVM_Basics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj",
+        "projectUniqueName": "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\MVVM_Basics.csproj",
         "projectName": "MVVM_Basics",
-        "projectPath": "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj",
+        "projectPath": "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\MVVM_Basics.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\obj\\",
+        "outputPath": "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
