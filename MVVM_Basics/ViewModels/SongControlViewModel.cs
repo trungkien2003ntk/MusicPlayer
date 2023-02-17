@@ -4,6 +4,7 @@ using MVVM_Basics.EventAndCommandHandlers;
 using MVVM_Basics.Helpers;
 using MVVM_Basics.Interfaces;
 using MVVM_Basics.Models;
+using MVVM_Basics.Views.MessageAndNotification;
 using System;
 using System.IO;
 using System.Linq;
@@ -144,6 +145,10 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
 
                         context.LikedSongs.Remove(likedSong);
                         context.SaveChanges();
+
+
+                        // Notify the user that the song was removed from the LikedSongs playlist
+                        Messenger.Default.Send(new ShowNotificationMessage(NotificationType.Removed, TargetType.LikedSongs));
                     }
                 }
                 else
@@ -158,6 +163,10 @@ public class SongControlViewModel : ViewModelBase, ISoundPlayer
 
                         context.LikedSongs.Add(likedSong);
                         context.SaveChanges();
+
+
+                        // Notify the user that the song was added to the LikedSongs playlist
+                        Messenger.Default.Send(new ShowNotificationMessage(NotificationType.Added, TargetType.LikedSongs));
                     }
                 }
             });
