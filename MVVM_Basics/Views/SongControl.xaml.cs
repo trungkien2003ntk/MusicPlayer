@@ -182,4 +182,10 @@ public partial class SongControl : UserControl
 
         mediaPlayer.Position = mediaTimeSpan;
     }
+
+    private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
+    {
+        mediaPlayer.Position = TimeSpan.FromSeconds(0);
+        sliderTime.Value = 0;
+    }
 }

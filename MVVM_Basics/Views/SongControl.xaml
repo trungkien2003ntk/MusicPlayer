@@ -110,7 +110,8 @@
                 <Button Grid.Column="0"
                     Template="{DynamicResource ButtonTemplate1}"
                     Style="{DynamicResource trackControlBtnSkip}"
-                    Content="{materialDesign:PackIcon Kind=SkipPrevious,Size=30}"/>
+                    Content="{materialDesign:PackIcon Kind=SkipPrevious,Size=30}"
+                        Click="ButtonPrevious_Click"/>
                 
                 <!--Play/pause button-->
                 <ToggleButton Grid.Column="1"
