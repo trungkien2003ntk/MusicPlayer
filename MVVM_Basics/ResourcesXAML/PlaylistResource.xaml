@@ -93,7 +93,7 @@
     <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
         <StackPanel Margin="-20,0,0,0" Background="{StaticResource ContextMenuNormalBackground}"/>
     </ItemsPanelTemplate>
-        
+
     <!--Separator-->
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" 
        TargetType="{x:Type Separator}">
@@ -162,6 +162,7 @@
                   Command="{Binding AddAllPlaylistSongsToQueue}"/>
 
         <Separator/>
+        
 
         <!--Delete-->
         <MenuItem Header="Delete" 
