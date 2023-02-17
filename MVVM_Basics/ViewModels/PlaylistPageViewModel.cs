@@ -87,12 +87,12 @@ public class PlaylistPageViewModel : ViewModelBase
                 {
                     List<int> selectedIndices = GetAllSelectedItemIndicesFromListView(listView);
 
-                    RemoveSelectedSongsFromLocalPlaylist(selectedIndices, PlaylistSongs);
-
                     using (var context = _ServiceProvider.GetRequiredService<MusicPlayerVpContext>())
                     {
                         RemoveSongsFromDatabasePlaylist(listView, context, selectedIndices);
                     }
+
+                    RemoveSelectedSongsFromLocalPlaylist(selectedIndices, PlaylistSongs);
                 }
             });
 
@@ -288,9 +288,9 @@ public class PlaylistPageViewModel : ViewModelBase
 
         foreach (int selectedIndex in selectedIndices)
         {
-            //ListViewItem? listViewItem = listView.ItemContainerGenerator.ContainerFromIndex(selectedIndex) as ListViewItem;
+            Song selectedSong = (Song)listView.Items[selectedIndex];
 
-            result.Add((Song)listView.Items[selectedIndex]);
+            result.Add(selectedSong);
         }
 
         return result;

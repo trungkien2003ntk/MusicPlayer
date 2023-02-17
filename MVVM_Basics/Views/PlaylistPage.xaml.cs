@@ -76,6 +76,7 @@ public partial class PlaylistPage : UserControl
             songAddedDates = context.PlaylistSongs.Where(ps =>
                                                         ps.PlaylistId == sharedDataContext.CurrentOpeningPlaylist!.Id
                                                   )
+                                                  .OrderBy(ps => ps.AddedDate)
                                                   .Select(ps => ps.AddedDate)
                                                   .ToList();
         }
