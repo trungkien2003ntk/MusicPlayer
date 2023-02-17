@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kECbmjIBsjtbeZDwAxzH/fHGLNrM1gLvLLfo/lo8yiMrF3V4ARGQlmA+GU/Md3AU3zwXAkhLhAZ749+2mdhNJw==",
+  "dgSpecHash": "eAswGf4sgnOhsr1BQ3tdJ2iqLED4f9mWobVfb4MQRWutD+2CDruHuxIr6y6FRnn7Dc0RQ6qneETbjk3BXK+E3A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ADMIN\\source\\repos\\MVVM_Basics\\MVVM_Basics\\MVVM_Basics.csproj",
+  "projectFilePath": "C:\\Users\\ADMIN\\Downloads\\Documents\\Github\\MusicPlayer\\MVVM_Basics\\MVVM_Basics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\commonservicelocator\\2.0.2\\commonservicelocator.2.0.2.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
