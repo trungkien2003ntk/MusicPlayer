@@ -110,6 +110,7 @@
                                 Foreground="Black"
                                 BorderBrush="Transparent"
                                 Width="60" Height="60"
+                                    Command="{Binding AddAllPlaylistSongsToQueue}"
                                 Content="{materialDesign:PackIcon Kind=Play,Size=40}"/>
 
                             <!--Download button-->
